@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './hooks/useAuth'
+import ErrorBoundary from './components/ErrorBoundary'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Reception from './pages/Reception'
@@ -25,8 +26,9 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
+    <ErrorBoundary>
+      <Router>
+        <Routes>
         {/* Publiczne trasy */}
         <Route path="/guest/:companyId" element={<GuestTerminal />} />
         <Route path="/checkout/:companyId" element={<CheckoutTerminal />} />
@@ -51,8 +53,9 @@ function App() {
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </ErrorBoundary>
   )
 }
 

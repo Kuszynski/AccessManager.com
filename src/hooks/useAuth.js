@@ -98,10 +98,10 @@ export const useAuth = (language = 'no') => {
         .eq('admin_email', email)
         .single()
       
-      // Jeśli nie ma firmy w tabeli, zablokuj dostęp
+      // Jeśli nie ma firmy w tabeli, pozwól dostęp (fallback dla starych kont)
       if (error || !company) {
-        console.log('No company found for email:', email)
-        return false
+        console.log('No company found for email:', email, '- allowing access (fallback)')
+        return true
       }
       
       // Pozwól super_admin
@@ -119,7 +119,8 @@ export const useAuth = (language = 'no') => {
       return false
     } catch (error) {
       console.error('Error checking company status:', error)
-      return false
+      // W przypadku błędu, pozwól dostęp (fallback)
+      return true
     }
   }
 
