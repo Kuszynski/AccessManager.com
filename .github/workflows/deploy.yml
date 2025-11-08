@@ -37,8 +37,9 @@ jobs:
         REACT_APP_EMAILJS_HOST_TEMPLATE_ID: ${{ secrets.REACT_APP_EMAILJS_HOST_TEMPLATE_ID }}
         
     - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4
       if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
+        force_orphan: true
