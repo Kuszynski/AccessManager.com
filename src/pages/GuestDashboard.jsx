@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
@@ -156,8 +156,8 @@ const GuestDashboard = () => {
         {/* Main Actions */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Registration */}
-          <a
-            href={getRegistrationLink()}
+          <Link
+            to={getRegistrationLink()}
             onClick={() => handleActionClick('register')}
             className="group bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-8 md:p-12 transition-all duration-200 hover:shadow-lg active:scale-98"
           >
@@ -175,11 +175,11 @@ const GuestDashboard = () => {
                 {t('clickToStart') || 'Trykk for å starte'}
               </div>
             </div>
-          </a>
+          </Link>
 
           {/* Checkout */}
-          <a
-            href={getCheckoutLink()}
+          <Link
+            to={getCheckoutLink()}
             onClick={() => handleActionClick('checkout')}
             className="group bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-8 md:p-12 transition-all duration-200 hover:shadow-lg active:scale-98"
           >
@@ -197,7 +197,7 @@ const GuestDashboard = () => {
                 {t('clickToCheckout') || 'Trykk for å melde ut'}
               </div>
             </div>
-          </a>
+          </Link>
         </div>
 
         {/* Success Animation */}

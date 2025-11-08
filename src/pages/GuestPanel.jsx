@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
@@ -100,8 +100,8 @@ const GuestPanel = () => {
         <div className="bg-gray-50 border border-gray-200 p-4 sm:p-6 rounded-2xl mb-8">
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
             <div className="flex items-center">
-              <a
-                href="/dashboard"
+              <Link
+                to="/dashboard"
                 className="flex items-center bg-gray-100 hover:bg-gray-200 p-2 sm:px-4 sm:py-3 rounded-lg transition-colors mr-3 sm:mr-6"
               >
                 <ArrowLeft className="h-4 w-4 sm:hidden text-gray-600" />
@@ -109,7 +109,7 @@ const GuestPanel = () => {
                 <span className="hidden sm:inline text-sm font-medium text-gray-600 ml-2">
                   {language === 'no' ? 'Tilbake' : language === 'en' ? 'Back' : 'Powrót'}
                 </span>
-              </a>
+              </Link>
               {company?.logo_url ? (
                 <img 
                   src={company.logo_url} 
@@ -162,15 +162,13 @@ const GuestPanel = () => {
             </div>
             
             <div className="space-y-4">
-              <a
-                href={getRegistrationLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={`/guest/${companyId}`}
                 className="w-full flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-xl font-semibold hover:bg-green-700 transition-colors"
               >
                 <Tablet className="h-5 w-5 mr-2" />
                 {t('openRegistrationTerminal')}
-              </a>
+              </Link>
               
               <button
                 onClick={() => copyToClipboard(getRegistrationLink(), 'registrering')}
@@ -201,15 +199,13 @@ const GuestPanel = () => {
             </div>
             
             <div className="space-y-4">
-              <a
-                href={getCheckoutLink()}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to={`/checkout/${companyId}`}
                 className="w-full flex items-center justify-center px-6 py-4 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-colors"
               >
                 <Tablet className="h-5 w-5 mr-2" />
                 {t('openCheckoutTerminal')}
-              </a>
+              </Link>
               
               <button
                 onClick={() => copyToClipboard(getCheckoutLink(), 'utsjekking')}
