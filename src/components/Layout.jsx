@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { supabase } from '../utils/supabase'
 import { LogOut, Shield, Settings, Upload, X } from 'lucide-react'
@@ -154,20 +155,20 @@ const Layout = ({ children, title, t }) => {
             
             {user && (
               <div className="flex items-center space-x-4">
-                <a href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('dashboard') : 'Dashboard'}</a>
-                <a href="/reception" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('reception') : 'Reception'}</a>
+                <Link to="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('dashboard') : 'Dashboard'}</Link>
+                <Link to="/reception" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('reception') : 'Reception'}</Link>
                 {/* Zatwierdzanie tylko dla super-admina */}
                 {isSuperAdmin && (
-                  <a href="/admin/approval" className="text-sm text-gray-600 hover:text-gray-900">Zatwierdzanie</a>
+                  <Link to="/admin/approval" className="text-sm text-gray-600 hover:text-gray-900">Zatwierdzanie</Link>
                 )}
                 <span className="text-sm text-gray-600">{user.email}</span>
-                <a
-                  href="/settings"
+                <Link
+                  to="/settings"
                   className="flex items-center text-gray-600 hover:text-gray-900"
                 >
                   <Settings className="h-4 w-4 mr-1" />
                   {t ? t('settings') || 'Innstillinger' : 'Innstillinger'}
-                </a>
+                </Link>
                 <button
                   onClick={handleSignOut}
                   className="flex items-center text-gray-600 hover:text-gray-900"

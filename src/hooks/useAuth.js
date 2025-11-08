@@ -11,32 +11,11 @@ export const useAuth = (language = 'no') => {
     // Pobierz aktualnego użytkownika
     const getUser = async () => {
       try {
-        // Krótki timeout dla Vercel
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('timeout')), 3000)
-        )
-        
-        const { data: { user }, error } = await Promise.race([
-          supabase.auth.getUser(),
-          timeoutPromise
-        ])
-        
-        if (user) {
-          // Sprawdź status firmy
-          const isAllowed = await checkCompanyStatus(user.email)
-          if (!isAllowed) {
-            await supabase.auth.signOut()
-            setUser(null)
-            setLoading(false)
-            return
-          }
-        }
+        const { data: { user } } = await supabase.auth.getUser()
         setUser(user)
         setLoading(false)
       } catch (error) {
-        console.error('useAuth - error in getUser:', error)
-        
-        // Szybki fallback dla Vercel
+        console.error('Auth error:', error)
         setUser(null)
         setLoading(false)
       }
@@ -46,24 +25,9 @@ export const useAuth = (language = 'no') => {
 
     // Nasłuchuj zmian autoryzacji
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        try {
-          if (session?.user) {
-            // Sprawdź status firmy przy każdej zmianie sesji
-            const isAllowed = await checkCompanyStatus(session.user.email)
-            if (!isAllowed) {
-              await supabase.auth.signOut()
-              return
-            }
-          }
-          
-          setUser(session?.user ?? null)
-          setLoading(false)
-        } catch (error) {
-          console.error('Auth state change error:', error)
-          setUser(null)
-          setLoading(false)
-        }
+      (event, session) => {
+        setUser(session?.user ?? null)
+        setLoading(false)
       }
     )
 
@@ -71,42 +35,13 @@ export const useAuth = (language = 'no') => {
   }, [])
 
   const signIn = async (email, password) => {
-    // Najpierw sprawdź status firmy przed logowaniem
-    const { data: company } = await supabase
-      .from('companies')
-      .select('status, role')
-      .eq('admin_email', email)
-      .single()
-    
-    // Zablokuj dostęp dla firm pending (oprócz super_admin)
-    if (company && company.status === 'pending' && company.role !== 'super_admin') {
-      return { 
-        data: null, 
-        error: { message: t('accountPendingApproval') }
-      }
-    }
-    
-    // Zablokuj dostęp dla firm rejected
-    if (company && company.status === 'rejected') {
-      return { 
-        data: null, 
-        error: { message: t('accountRejected') }
-      }
-    }
-    
-    // Jeśli status jest OK, zaloguj użytkownika
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
     
-    // Mapuj błędy Supabase na tłumaczenia
-    if (error) {
-      let translatedError = error
-      if (error.message === 'Invalid login credentials') {
-        translatedError = { ...error, message: t('invalidLoginCredentials') }
-      }
-      return { data, error: translatedError }
+    if (error && error.message === 'Invalid login credentials') {
+      return { data, error: { ...error, message: t('invalidLoginCredentials') } }
     }
     
     return { data, error }

@@ -32,7 +32,7 @@ function App() {
   try {
     return (
       <ErrorBoundary>
-        <Router basename={process.env.NODE_ENV === 'production' ? '/AccessManager.com' : '/'}>
+        <Router>
           <Routes>
         {/* Publiczne trasy */}
         <Route path="/guest/:companyId" element={<GuestTerminal />} />

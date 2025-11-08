@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { dbHelpers, supabase } from '../utils/supabase'
 import { generateEvacuationList } from '../utils/pdfGenerator'
@@ -332,24 +333,22 @@ const Dashboard = () => {
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
           <h3 className="text-lg font-semibold text-blue-900 mb-4">{t('guestTerminals')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a
-              href={`/panel/${company?.id || 'demo'}`}
+            <Link
+              to={`/panel/${company?.id || 'demo'}`}
               className="flex items-center justify-center px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg font-semibold"
             >
               <Users className="h-6 w-6 mr-3" />
               {t('guestPanel')}
-            </a>
-            <a
-              href={`/lobby/${company?.id || 'demo'}`}
-              target="_blank"
-              rel="noopener noreferrer"
+            </Link>
+            <Link
+              to={`/lobby/${company?.id || 'demo'}`}
               className="flex items-center justify-center px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 text-lg font-semibold"
             >
               <Shield className="h-6 w-6 mr-3" />
               {language === 'no' ? 'Terminal for Gjester' :
                language === 'en' ? 'Guest Terminal' :
                'Terminal dla Gości'}
-            </a>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <p className="text-blue-700 text-sm text-center">
