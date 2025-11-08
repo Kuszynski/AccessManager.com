@@ -20,7 +20,7 @@ const Reception = () => {
 
   useEffect(() => {
     loadData()
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadData = async () => {
     if (!user) return
@@ -72,7 +72,7 @@ const Reception = () => {
       }
       
       // Zarejestruj gościa bez QR
-      const { data: visitor, error } = await supabase
+      const { error } = await supabase
         .from('visitors')
         .insert([{
           ...visitorData,

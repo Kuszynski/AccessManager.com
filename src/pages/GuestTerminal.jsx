@@ -74,7 +74,7 @@ const GuestTerminal = () => {
         .single()
       
       // Zarejestruj gościa bez QR
-      const { data: visitor, error } = await supabase
+      const { error } = await supabase
         .from('visitors')
         .insert([{
           ...visitorData,

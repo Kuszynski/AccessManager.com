@@ -1,7 +1,7 @@
 import React from 'react'
 import { format } from 'date-fns'
-import { pl } from 'date-fns/locale'
-import { LogOut, QrCode, User, Building, Phone, Clock } from 'lucide-react'
+
+import { LogOut, User, Building, Phone, Clock } from 'lucide-react'
 
 const VisitorList = ({ visitors, onCheckOut, t }) => {
   if (!visitors || visitors.length === 0) {
@@ -45,7 +45,7 @@ const VisitorList = ({ visitors, onCheckOut, t }) => {
                 
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-2" />
-                  {t ? t('checkIn') : 'Wejście'}: {format(new Date(visitor.check_in_time), 'dd.MM.yyyy HH:mm', { locale: pl })}
+                  {t ? t('checkIn') : 'Wejście'}: {format(new Date(visitor.check_in_time), 'dd.MM.yyyy HH:mm')}
                 </div>
               </div>
             </div>

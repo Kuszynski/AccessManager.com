@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf'
 import { format } from 'date-fns'
-import { pl } from 'date-fns/locale'
+
 
 export const generateEvacuationList = (visitors, companyName, t) => {
   const doc = new jsPDF('landscape') // Orientacja pozioma dla większej przestrzeni

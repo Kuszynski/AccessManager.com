@@ -18,7 +18,7 @@ const CheckoutTerminal = () => {
 
   useEffect(() => {
     loadCompany()
-  }, [companyId])
+  }, [companyId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadCompany = async () => {
     try {

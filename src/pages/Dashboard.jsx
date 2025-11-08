@@ -6,7 +6,7 @@ import Layout from '../components/Layout'
 import VisitorList from '../components/VisitorList'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
-import { AlertTriangle, Users, Download, MessageSquare, Shield, LogOut } from 'lucide-react'
+import { AlertTriangle, Users, Download, Shield } from 'lucide-react'
 
 const Dashboard = () => {
   const { user } = useAuth()
@@ -19,7 +19,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     loadData()
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadData = async () => {
     if (!user) return
