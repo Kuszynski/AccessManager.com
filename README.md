@@ -162,3 +162,14 @@ W przypadku problemów lub pytań, utwórz issue w repozytorium.
 ---
 
 **SafeVisit** - Bezpieczne zarządzanie gośćmi dla nowoczesnych firm 🛡️
+
+---
+
+## © Copyright
+
+**All Rights Reserved**  
+Copyright (c) 2024 Michał Kuszyński
+
+This software is proprietary and confidential. Unauthorized copying, distribution, or use is strictly prohibited.
+
+For licensing inquiries, please contact: [your-email@example.com]

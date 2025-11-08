@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "homepage": "https://kuszynski.github.io/AccessManager.com",
   "private": true,
+  "author": "Michał Kuszyński",
+  "license": "UNLICENSED",
+  "copyright": "Copyright (c) 2024 Michał Kuszyński. All rights reserved.",
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@supabase/supabase-js": "^2.38.0",
