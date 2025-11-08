@@ -16,7 +16,7 @@ const Layout = ({ children, title, t }) => {
       console.log('Layout - loading company for user:', user.email)
       loadCompany()
     }
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadCompany = async () => {
     try {

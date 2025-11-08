@@ -3,14 +3,13 @@ import { useParams } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
-import { Shield, LogIn, LogOut, Clock, Wifi, WifiOff, Phone, Settings, Upload, X } from 'lucide-react'
+import { LogIn, LogOut } from 'lucide-react'
 
 const GuestDashboard = () => {
   const { companyId } = useParams()
   const [company, setCompany] = useState(null)
   const [language, setLanguage] = useState('no')
-  const [currentTime, setCurrentTime] = useState(new Date())
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
+
   const [lastActivity, setLastActivity] = useState(Date.now())
   const [showSuccess, setShowSuccess] = useState(false)
 
@@ -33,14 +32,9 @@ const GuestDashboard = () => {
       setLastActivity(Date.now())
     }
     
-    // Status połączenia
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
+
     
-    // Aktualizuj czas co sekundę
-    const timeInterval = setInterval(() => {
-      setCurrentTime(new Date())
-    }, 1000)
+
     
     // Auto-refresh co 30 minut
     const refreshInterval = setInterval(() => {
@@ -63,19 +57,16 @@ const GuestDashboard = () => {
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('click', handleActivity)
     window.addEventListener('touchstart', handleActivity)
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+
     
     return () => {
-      clearInterval(timeInterval)
       clearInterval(refreshInterval)
       clearInterval(heartbeatInterval)
       clearInterval(inactivityInterval)
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('click', handleActivity)
       window.removeEventListener('touchstart', handleActivity)
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
+
     }
   }, [companyId, lastActivity])
 
@@ -137,22 +128,7 @@ const GuestDashboard = () => {
 
 
 
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('no-NO', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
-    })
-  }
 
-  const formatDate = (date) => {
-    return date.toLocaleDateString('no-NO', { 
-      weekday: 'long',
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    })
-  }
 
   useEffect(() => {
     if (company?.name) {

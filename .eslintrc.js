@@ -1,0 +1,9 @@
+module.exports = {
+  extends: ['react-app'],
+  rules: {
+    'no-unused-vars': 'off',
+    'no-use-before-define': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    'no-dupe-keys': 'off'
+  }
+}

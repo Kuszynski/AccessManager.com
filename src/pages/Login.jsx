@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useTranslation } from '../utils/translations'
 import LanguageSelector from '../components/LanguageSelector'
@@ -33,7 +33,7 @@ const Login = () => {
     if (formData.password) {
       validatePassword(formData.password)
     }
-  }, [language, formData.password, validatePassword]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [language, formData.password, validatePassword])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -90,7 +90,7 @@ const Login = () => {
     }
   }
   
-  const validatePassword = (password) => {
+  const validatePassword = useCallback((password) => {
     const errors = []
     
     if (password.length < 8) {
@@ -111,7 +111,7 @@ const Login = () => {
     
     setPasswordErrors(errors)
     return errors.length === 0
-  }
+  }, [t])
   
   const validatePhone = (phone) => {
     const phoneRegex = /^\+\d{1,4}\s?\d{8,15}$/
