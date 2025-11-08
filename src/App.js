@@ -1,7 +1,12 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './hooks/useAuth'
+import './index.css'
+
+// Simple imports without lazy loading
 import ErrorBoundary from './components/ErrorBoundary'
+import { useAuth } from './hooks/useAuth'
+
+// Import pages
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Reception from './pages/Reception'
@@ -12,7 +17,6 @@ import CheckoutTerminal from './pages/CheckoutTerminal'
 import GuestPanel from './pages/GuestPanel'
 import GuestDashboard from './pages/GuestDashboard'
 import PrivacyPolicy from './pages/PrivacyPolicy'
-import './index.css'
 
 function App() {
   const { user, loading } = useAuth()

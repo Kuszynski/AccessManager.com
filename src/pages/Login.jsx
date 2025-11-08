@@ -27,13 +27,6 @@ const Login = () => {
 
   const { signIn, signUp } = useAuth(language)
   const { t } = useTranslation(language)
-  
-  // Aktualizuj walidację hasła przy zmianie języka
-  React.useEffect(() => {
-    if (formData.password) {
-      validatePassword(formData.password)
-    }
-  }, [language, formData.password, validatePassword])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -112,6 +105,13 @@ const Login = () => {
     setPasswordErrors(errors)
     return errors.length === 0
   }, [t])
+  
+  // Aktualizuj walidację hasła przy zmianie języka
+  React.useEffect(() => {
+    if (formData.password) {
+      validatePassword(formData.password)
+    }
+  }, [language, formData.password, validatePassword])
   
   const validatePhone = (phone) => {
     const phoneRegex = /^\+\d{1,4}\s?\d{8,15}$/
