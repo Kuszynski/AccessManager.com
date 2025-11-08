@@ -124,7 +124,13 @@ const Layout = ({ children, title, t }) => {
   }
 
   const handleSignOut = async () => {
-    await signOut()
+    try {
+      await signOut()
+      // Przekieruj do strony logowania
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Błąd wylogowania:', error)
+    }
   }
 
   return (

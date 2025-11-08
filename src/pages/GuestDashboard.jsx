@@ -72,33 +72,25 @@ const GuestDashboard = () => {
 
   const loadCompany = async () => {
     try {
-      const { data: firstCompany } = await supabase
+      const { data: companyData } = await supabase
         .from('companies')
         .select('*')
-        .limit(1)
+        .eq('id', companyId)
         .single()
       
-      setCompany(firstCompany || {
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      setCompany(companyData)
     } catch (error) {
       console.error('Błąd ładowania firmy:', error)
-      setCompany({
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      setCompany(null)
     }
   }
 
   const getRegistrationLink = () => {
-    return `/guest/${company?.id || 'demo'}`
+    return `/guest/${companyId}`
   }
 
   const getCheckoutLink = () => {
-    return `/checkout/${company?.id || 'demo'}`
+    return `/checkout/${companyId}`
   }
   
   const sendHeartbeat = async () => {

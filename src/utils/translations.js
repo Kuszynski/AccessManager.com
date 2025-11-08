@@ -2,7 +2,7 @@ export const translations = {
   no: {
     // Główne
     appName: 'SafeVisit',
-    appDescription: 'by AccessManager',
+    appDescription: 'Visitor management that works',
     
     // Nawigacja
     dashboard: 'Hovedpanel',
@@ -224,7 +224,7 @@ export const translations = {
     
     // Registration approval system
     registrationPending: 'Registrering sendt! Vent på godkjenning fra administrator.',
-    guestManagementSystem: 'by AccessManager',
+    guestManagementSystem: 'Visitor management that works',
     signIn: 'Logg inn',
     loading: 'Laster...',
     settings: 'Innstillinger',
@@ -288,7 +288,7 @@ export const translations = {
   en: {
     // Main
     appName: 'SafeVisit',
-    appDescription: 'by AccessManager',
+    appDescription: 'Visitor management that works',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -502,7 +502,7 @@ export const translations = {
     
     // Registration approval system
     registrationPending: 'Registration sent! Wait for administrator approval.',
-    guestManagementSystem: 'by AccessManager',
+    guestManagementSystem: 'Visitor management that works',
     signIn: 'Sign In',
     loading: 'Loading...',
     settings: 'Settings',
@@ -566,7 +566,7 @@ export const translations = {
   pl: {
     // Główne
     appName: 'SafeVisit',
-    appDescription: 'by AccessManager',
+    appDescription: 'Visitor management that works',
     
     // Nawigacja
     dashboard: 'Panel główny',
@@ -780,7 +780,7 @@ export const translations = {
     
     // Registration approval system
     registrationPending: 'Rejestracja wysłana! Oczekuj na zatwierdzenie przez administratora.',
-    guestManagementSystem: 'by AccessManager',
+    guestManagementSystem: 'Visitor management that works',
     signIn: 'Zaloguj się',
     loading: 'Ładowanie...',
     settings: 'Ustawienia',

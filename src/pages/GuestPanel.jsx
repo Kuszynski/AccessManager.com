@@ -21,24 +21,16 @@ const GuestPanel = () => {
 
   const loadCompany = async () => {
     try {
-      const { data: firstCompany } = await supabase
+      const { data: companyData } = await supabase
         .from('companies')
         .select('*')
-        .limit(1)
+        .eq('id', companyId)
         .single()
       
-      setCompany(firstCompany || {
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      setCompany(companyData)
     } catch (error) {
       console.error('Błąd ładowania firmy:', error)
-      setCompany({
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      setCompany(null)
     }
   }
 
@@ -48,6 +40,7 @@ const GuestPanel = () => {
         .from('visitors')
         .select('id')
         .eq('status', 'in')
+        .eq('company_id', companyId)
       
       if (!error) {
         setCurrentGuests(data?.length || 0)
@@ -58,11 +51,11 @@ const GuestPanel = () => {
   }
 
   const getRegistrationLink = () => {
-    return `${window.location.origin}/guest/${company?.id || 'demo'}`
+    return `${window.location.origin}/guest/${companyId}`
   }
 
   const getCheckoutLink = () => {
-    return `${window.location.origin}/checkout/${company?.id || 'demo'}`
+    return `${window.location.origin}/checkout/${companyId}`
   }
 
   const copyToClipboard = (text, type) => {

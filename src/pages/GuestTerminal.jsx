@@ -59,25 +59,44 @@ const GuestTerminal = () => {
 
   const loadCompany = async () => {
     try {
-      // Zawsze użyj pierwszej dostępnej firmy
-      const { data: firstCompany } = await supabase
+      console.log('Loading company with ID:', companyId)
+      const { data: companyData, error } = await supabase
         .from('companies')
         .select('*')
-        .limit(1)
+        .eq('id', companyId)
         .single()
       
-      setCompany(firstCompany || {
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      console.log('Company data:', companyData, 'Error:', error)
+      
+      if (companyData) {
+        setCompany(companyData)
+      } else {
+        // Fallback - pobierz pierwszą dostępną firmę
+        const { data: firstCompany } = await supabase
+          .from('companies')
+          .select('*')
+          .limit(1)
+          .single()
+        
+        console.log('Fallback company:', firstCompany)
+        setCompany(firstCompany || { id: companyId, name: 'Demo Company', address: 'Demo Address' })
+      }
     } catch (error) {
       console.error('Błąd ładowania firmy:', error)
-      setCompany({
-        id: 'demo',
-        name: 'Elektryk AS',
-        address: 'ul. Młotkowa 2, Warszawa'
-      })
+      // Fallback - pobierz pierwszą dostępną firmę
+      try {
+        const { data: firstCompany } = await supabase
+          .from('companies')
+          .select('*')
+          .limit(1)
+          .single()
+        
+        console.log('Error fallback company:', firstCompany)
+        setCompany(firstCompany || { id: companyId, name: 'Demo Company', address: 'Demo Address' })
+      } catch (fallbackError) {
+        console.error('Fallback error:', fallbackError)
+        setCompany({ id: companyId, name: 'Demo Company', address: 'Demo Address' })
+      }
     } finally {
       setLoading(false)
     }
@@ -86,20 +105,13 @@ const GuestTerminal = () => {
   const handleVisitorSubmit = async (visitorData) => {
     setSubmitLoading(true)
     try {
-      // Pobierz ID pierwszej firmy
-      const { data: firstCompany } = await supabase
-        .from('companies')
-        .select('id')
-        .limit(1)
-        .single()
-      
       // Zarejestruj gościa bez QR
       const { error } = await supabase
         .from('visitors')
         .insert([{
           ...visitorData,
           qr_code_id: `guest_${Date.now()}`, // Prosty identyfikator
-          company_id: firstCompany?.id || null,
+          company_id: companyId,
           check_in_time: new Date().toISOString(),
           status: 'in'
         }])
