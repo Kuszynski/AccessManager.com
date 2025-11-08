@@ -111,7 +111,7 @@ const Login = () => {
     if (formData.password) {
       validatePassword(formData.password)
     }
-  }, [language, formData.password, validatePassword])
+  }, [language, formData.password]) // Usunięto validatePassword z dependencies
   
   const validatePhone = (phone) => {
     const phoneRegex = /^\+\d{1,4}\s?\d{8,15}$/

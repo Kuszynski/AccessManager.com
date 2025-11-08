@@ -10,21 +10,27 @@ export const useAuth = (language = 'no') => {
   useEffect(() => {
     // Pobierz aktualnego użytkownika
     const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (user) {
-        // Sprawdź status firmy
-        const isAllowed = await checkCompanyStatus(user.email)
-        if (!isAllowed) {
-          await supabase.auth.signOut()
-          setUser(null)
-          setLoading(false)
-          return
+      try {
+        const { data: { user }, error } = await supabase.auth.getUser()
+        
+        if (user) {
+          // Sprawdź status firmy
+          const isAllowed = await checkCompanyStatus(user.email)
+          if (!isAllowed) {
+            await supabase.auth.signOut()
+            setUser(null)
+            setLoading(false)
+            return
+          }
         }
+        setUser(user)
+        setLoading(false)
+      } catch (error) {
+        console.error('useAuth - error in getUser:', error)
+        
+        setUser(null)
+        setLoading(false)
       }
-      
-      setUser(user)
-      setLoading(false)
     }
 
     getUser()
@@ -40,6 +46,7 @@ export const useAuth = (language = 'no') => {
             return
           }
         }
+        
         setUser(session?.user ?? null)
         setLoading(false)
       }

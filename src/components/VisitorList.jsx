@@ -1,7 +1,18 @@
 import React, { useState } from 'react'
-import { format } from 'date-fns'
 import { sendHostNotification } from '../utils/hostNotification'
 import { LogOut, User, Building, Phone, Clock, Mail, Bell } from 'lucide-react'
+
+// Prosta funkcja formatowania daty
+const formatDate = (dateString) => {
+  const date = new Date(dateString)
+  return date.toLocaleString('no-NO', {
+    day: '2-digit',
+    month: '2-digit', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
 
 const VisitorList = ({ visitors, onCheckOut, t, company }) => {
   const [notifyingGuest, setNotifyingGuest] = useState(null)
@@ -146,13 +157,13 @@ const VisitorCard = ({ visitor, onCheckOut, onNotifyHost, notifyingGuest, t, isA
             
             <div className="flex items-center">
               <Clock className="h-4 w-4 mr-2" />
-              Inn: {format(new Date(visitor.check_in_time), 'dd.MM.yyyy HH:mm')}
+              Inn: {formatDate(visitor.check_in_time)}
             </div>
             
             {!isActive && visitor.check_out_time && (
               <div className="flex items-center">
                 <LogOut className="h-4 w-4 mr-2" />
-                Ut: {format(new Date(visitor.check_out_time), 'dd.MM.yyyy HH:mm')}
+                Ut: {formatDate(visitor.check_out_time)}
               </div>
             )}
           </div>

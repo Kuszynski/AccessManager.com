@@ -21,9 +21,6 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 function App() {
   const { user, loading } = useAuth()
 
-  // Debug logging
-  console.log('App render - user:', user, 'loading:', loading)
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex justify-center items-center">

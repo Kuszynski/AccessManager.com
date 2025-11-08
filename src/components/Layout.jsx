@@ -124,8 +124,11 @@ const Layout = ({ children, title, t }) => {
   }
 
   const handleSignOut = async () => {
+    console.log('handleSignOut clicked')
     try {
+      console.log('Calling signOut...')
       await signOut()
+      console.log('SignOut successful, redirecting...')
       // Przekieruj do strony logowania
       window.location.href = '/login'
     } catch (error) {
