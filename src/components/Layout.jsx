@@ -16,7 +16,7 @@ const Layout = ({ children, title, t }) => {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <Shield className="h-8 w-8 text-primary-600 mr-3" />
-              <h1 className="text-xl font-semibold text-gray-900">SafeVisit</h1>
+              <h1 className="text-xl font-semibold text-gray-900">AccessManager</h1>
               {title && (
                 <>
                   <span className="mx-3 text-gray-400">|</span>
@@ -27,15 +27,15 @@ const Layout = ({ children, title, t }) => {
             
             {user && (
               <div className="flex items-center space-x-4">
-                <a href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('panel') : 'Panel'}</a>
-                <a href="/reception" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('reception') : 'Recepcja'}</a>
+                <a href="/dashboard" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('dashboard') : 'Dashboard'}</a>
+                <a href="/reception" className="text-sm text-gray-600 hover:text-gray-900">{t ? t('reception') : 'Reception'}</a>
                 <span className="text-sm text-gray-600">{user.email}</span>
                 <button
                   onClick={handleSignOut}
                   className="flex items-center text-gray-600 hover:text-gray-900"
                 >
                   <LogOut className="h-4 w-4 mr-1" />
-                  {t ? t('logout') : 'Wyloguj'}
+                  {t ? t('logout') : 'Logout'}
                 </button>
               </div>
             )}

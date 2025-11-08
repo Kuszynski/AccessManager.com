@@ -54,10 +54,10 @@ const Login = () => {
           <Shield className="h-12 w-12 text-primary-600" />
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          SafeVisit
+          AccessManager
         </h2>
         <p className="mt-2 text-center text-sm text-gray-600">
-          System zarządzania gośćmi
+          Guest Management System
         </p>
       </div>
 
@@ -72,7 +72,7 @@ const Login = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Logowanie
+              Login
             </button>
             <button
               onClick={() => setIsLogin(false)}
@@ -82,7 +82,7 @@ const Login = () => {
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
-              Rejestracja
+              Register
             </button>
           </div>
 
@@ -111,7 +111,7 @@ const Login = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 <Lock className="inline h-4 w-4 mr-1" />
-                Hasło
+                Password
               </label>
               <input
                 type="password"
@@ -127,7 +127,7 @@ const Login = () => {
               <>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Nazwa firmy
+                    Company Name
                   </label>
                   <input
                     type="text"
@@ -141,7 +141,7 @@ const Login = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Adres firmy
+                    Company Address
                   </label>
                   <input
                     type="text"
@@ -155,7 +155,7 @@ const Login = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700">
-                    Telefon firmy
+                    Company Phone
                   </label>
                   <input
                     type="tel"
@@ -173,7 +173,7 @@ const Login = () => {
               disabled={loading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
             >
-              {loading ? 'Ładowanie...' : (isLogin ? 'Zaloguj się' : 'Zarejestruj firmę')}
+              {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Register Company')}
             </button>
           </form>
         </div>

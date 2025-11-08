@@ -14,6 +14,11 @@
    ```
    REACT_APP_SUPABASE_URL=your_supabase_url
    REACT_APP_SUPABASE_ANON_KEY=your_supabase_key
+   
+   # Optional: SMS for Emergency Notifications
+   REACT_APP_TWILIO_ACCOUNT_SID=your_twilio_sid
+   REACT_APP_TWILIO_AUTH_TOKEN=your_twilio_token
+   REACT_APP_TWILIO_PHONE_NUMBER=+1234567890
    ```
 4. Deploy
 
@@ -28,3 +33,9 @@ Copy `.env.example` to `.env` and fill with your Supabase credentials.
 
 ### Database Setup
 Run `supabase-simple-schema.sql` in your Supabase SQL Editor to create all required tables.
+
+### Emergency SMS Feature
+- Fire alarm button sends SMS to all guests with phone numbers
+- Messages in Norwegian, English, and Polish
+- Works with Twilio or SMSAPI
+- Falls back to console logging if no SMS provider configured

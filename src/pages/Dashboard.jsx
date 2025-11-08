@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { dbHelpers, supabase } from '../utils/supabase'
 import { generateEvacuationList } from '../utils/pdfGenerator'
+import { sendEmergencySMS, getEmergencyMessage } from '../utils/smsService'
 import Layout from '../components/Layout'
 import VisitorList from '../components/VisitorList'
 import LanguageSelector from '../components/LanguageSelector'
@@ -82,7 +83,7 @@ const Dashboard = () => {
   }
 
   const handleFireAlarm = async () => {
-    if (!window.confirm('Czy na pewno chcesz wywołać alarm pożarowy?')) {
+    if (!window.confirm(t('confirmAlarm'))) {
       return
     }
 
@@ -91,13 +92,35 @@ const Dashboard = () => {
       // Zapisz alert w bazie
       await dbHelpers.createAlert({
         type: 'fire',
-        triggered_by: user.id,
+        triggered_by: user.email,
         company_id: company.id
       })
 
-      // Generuj listę ewakuacyjną
-      console.log('Company data:', company)
       const companyName = company?.name || 'Nieznana firma'
+      
+      // Wyślij powiadomienia do wszystkich gości z emailem
+      const guestsWithEmail = visitors.filter(v => v.email)
+      console.log(`Sending notifications to ${guestsWithEmail.length} guests...`)
+      
+      const emergencyMessage = getEmergencyMessage(companyName, language)
+      
+      let notificationResults = []
+      for (const visitor of guestsWithEmail) {
+        try {
+          const result = await sendEmergencySMS(visitor.email, emergencyMessage, language)
+          notificationResults.push({ 
+            visitor: visitor.full_name, 
+            success: result.success, 
+            simulation: result.simulation,
+            provider: result.provider
+          })
+        } catch (error) {
+          console.error(`Notification error for ${visitor.full_name}:`, error)
+          notificationResults.push({ visitor: visitor.full_name, success: false, error: error.message })
+        }
+      }
+
+      // Generuj listę ewakuacyjną
       const pdf = generateEvacuationList(visitors, companyName, t)
       
       // Nazwa pliku w wybranym języku
@@ -107,8 +130,23 @@ const Dashboard = () => {
       const date = new Date().toISOString().split('T')[0]
       pdf.save(`${fileName}-${date}.pdf`)
 
-      // Tutaj można dodać wysyłanie SMS (wymaga integracji z Twilio/SMSAPI)
-      alert(`Alarm wywołany! Lista ewakuacyjna została wygenerowana. Obecnych gości: ${visitors.length}`)
+      // Pokaż wyniki
+      const successCount = notificationResults.filter(r => r.success).length
+      const simulationMode = notificationResults.some(r => r.simulation)
+      
+      console.log('Notification Results:', notificationResults)
+      
+      let message = `Fire alarm triggered!\n\n`
+      message += `Current guests: ${visitors.length}\n`
+      message += `Notifications sent: ${successCount}/${guestsWithEmail.length}\n`
+      
+      if (simulationMode) {
+        message += `\n⚠️ Notification simulation mode (missing config)`
+      } else if (successCount > 0) {
+        message += `\n✅ Emergency notifications sent successfully`
+      }
+      
+      alert(message)
       
     } catch (error) {
       console.error('Błąd wywołania alarmu:', error)

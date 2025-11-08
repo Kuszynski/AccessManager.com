@@ -169,7 +169,11 @@ export const translations = {
     hostPhonePlaceholder: '+47 987 65 432',
     hostPhoneDescription: 'For å varsle om ankomst',
     hostPhoneRequired: 'Telefon til vert er påkrevd',
-    smsNotification: 'Gjest ankommet'
+    smsNotification: 'Gjest ankommet',
+    emergencySMS: 'Nød-SMS sendt',
+    smsResults: 'SMS resultater',
+    smsSent: 'SMS sendt',
+    smsSimulation: 'SMS simulering - sjekk konsoll'
   },
   
   en: {
@@ -334,7 +338,11 @@ export const translations = {
     hostPhonePlaceholder: '+44 987 654 321',
     hostPhoneDescription: 'To notify about arrival',
     hostPhoneRequired: 'Host phone number is required',
-    smsNotification: 'Guest arrived'
+    smsNotification: 'Guest arrived',
+    emergencySMS: 'Emergency SMS sent',
+    smsResults: 'SMS results',
+    smsSent: 'SMS sent',
+    smsSimulation: 'SMS simulation - check console'
   },
   
   pl: {
@@ -499,7 +507,11 @@ export const translations = {
     hostPhonePlaceholder: '+48 987 654 321',
     hostPhoneDescription: 'Do powiadomienia o przybyciu',
     hostPhoneRequired: 'Telefon gospodarza jest wymagany',
-    smsNotification: 'Gość przybył'
+    smsNotification: 'Gość przybył',
+    emergencySMS: 'SMS alarmowy wysłany',
+    smsResults: 'Wyniki SMS',
+    smsSent: 'SMS wysłane',
+    smsSimulation: 'Symulacja SMS - sprawdź konsolę'
   }
 }
 
