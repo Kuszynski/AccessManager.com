@@ -6,22 +6,19 @@ import { Check, X, Clock, Building, Key } from 'lucide-react'
 const AdminApproval = () => {
   const { user } = useAuth()
   const [pendingCompanies, setPendingCompanies] = useState([])
-  const [approvedCompanies, setApprovedCompanies] = useState([])
   const [loading, setLoading] = useState(true)
   const [isSuperAdmin, setIsSuperAdmin] = useState(false)
   const [checkingAuth, setCheckingAuth] = useState(true)
-  const [activeTab, setActiveTab] = useState('pending')
 
   useEffect(() => {
     checkSuperAdmin()
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
   
   useEffect(() => {
     if (isSuperAdmin) {
       loadPendingCompanies()
-      loadApprovedCompanies()
     }
-  }, [isSuperAdmin])
+  }, [isSuperAdmin]) // eslint-disable-line react-hooks/exhaustive-deps
   
   const checkSuperAdmin = async () => {
     if (!user) {
@@ -62,21 +59,7 @@ const AdminApproval = () => {
     }
   }
   
-  const loadApprovedCompanies = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('companies')
-        .select('*')
-        .eq('status', 'approved')
-        .neq('role', 'super_admin')
-        .order('created_at', { ascending: false })
-      
-      if (error) throw error
-      setApprovedCompanies(data || [])
-    } catch (error) {
-      console.error('Error loading approved companies:', error)
-    }
-  }
+
 
   const handleApproval = async (companyId, status) => {
     try {
@@ -87,9 +70,8 @@ const AdminApproval = () => {
       
       if (error) throw error
       
-      // Odśwież listy
+      // Odśwież listę
       loadPendingCompanies()
-      loadApprovedCompanies()
       
       alert(`Firma została ${status === 'approved' ? 'zatwierdzona' : 'odrzucona'}`)
     } catch (error) {

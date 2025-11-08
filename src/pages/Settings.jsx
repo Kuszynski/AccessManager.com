@@ -11,7 +11,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [language, setLanguage] = useState('no')
+  const [language] = useState('no')
   const [formData, setFormData] = useState({
     name: '',
     phone: ''
@@ -22,7 +22,7 @@ const Settings = () => {
 
   useEffect(() => {
     loadCompany()
-  }, [user])
+  }, [user]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadCompany = async () => {
     if (!user) return

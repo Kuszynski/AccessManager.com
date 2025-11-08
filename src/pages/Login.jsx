@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useTranslation } from '../utils/translations'
 import LanguageSelector from '../components/LanguageSelector'
@@ -33,7 +33,7 @@ const Login = () => {
     if (formData.password) {
       validatePassword(formData.password)
     }
-  }, [language])
+  }, [language, formData.password, validatePassword]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e) => {
     e.preventDefault()
