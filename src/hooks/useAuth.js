@@ -11,7 +11,15 @@ export const useAuth = (language = 'no') => {
     // Pobierz aktualnego użytkownika
     const getUser = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser()
+        // Krótki timeout dla Vercel
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('timeout')), 3000)
+        )
+        
+        const { data: { user }, error } = await Promise.race([
+          supabase.auth.getUser(),
+          timeoutPromise
+        ])
         
         if (user) {
           // Sprawdź status firmy
@@ -28,6 +36,7 @@ export const useAuth = (language = 'no') => {
       } catch (error) {
         console.error('useAuth - error in getUser:', error)
         
+        // Szybki fallback dla Vercel
         setUser(null)
         setLoading(false)
       }
@@ -38,17 +47,23 @@ export const useAuth = (language = 'no') => {
     // Nasłuchuj zmian autoryzacji
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (session?.user) {
-          // Sprawdź status firmy przy każdej zmianie sesji
-          const isAllowed = await checkCompanyStatus(session.user.email)
-          if (!isAllowed) {
-            await supabase.auth.signOut()
-            return
+        try {
+          if (session?.user) {
+            // Sprawdź status firmy przy każdej zmianie sesji
+            const isAllowed = await checkCompanyStatus(session.user.email)
+            if (!isAllowed) {
+              await supabase.auth.signOut()
+              return
+            }
           }
+          
+          setUser(session?.user ?? null)
+          setLoading(false)
+        } catch (error) {
+          console.error('Auth state change error:', error)
+          setUser(null)
+          setLoading(false)
         }
-        
-        setUser(session?.user ?? null)
-        setLoading(false)
       }
     )
 
