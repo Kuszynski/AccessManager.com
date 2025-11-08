@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
-import { Shield, LogIn, LogOut, Users, Mail, Tablet } from 'lucide-react'
+import { Shield, LogIn, LogOut, Users, Mail, Tablet, ArrowLeft } from 'lucide-react'
 
 const GuestPanel = () => {
   const { companyId } = useParams()
@@ -102,40 +102,62 @@ const GuestPanel = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8 rounded-2xl shadow-lg mb-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="flex items-center mb-4">
-                <Shield className="h-12 w-12 mr-4" />
-                <div>
-                  <h1 className="text-4xl font-bold">{company?.name}</h1>
-                  <p className="text-blue-100 text-lg">{company?.address}</p>
+        <div className="bg-gray-50 border border-gray-200 p-4 sm:p-6 rounded-2xl mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
+            <div className="flex items-center">
+              <a
+                href="/dashboard"
+                className="flex items-center bg-gray-100 hover:bg-gray-200 p-2 sm:px-4 sm:py-3 rounded-lg transition-colors mr-3 sm:mr-6"
+              >
+                <ArrowLeft className="h-4 w-4 sm:hidden text-gray-600" />
+                <Shield className="hidden sm:block h-4 w-4 text-gray-600" />
+                <span className="hidden sm:inline text-sm font-medium text-gray-600 ml-2">
+                  {language === 'no' ? 'Tilbake' : language === 'en' ? 'Back' : 'Powrót'}
+                </span>
+              </a>
+              {company?.logo_url ? (
+                <img 
+                  src={company.logo_url} 
+                  alt={company.name}
+                  className="h-8 sm:h-10 w-auto mr-3 sm:mr-4"
+                />
+              ) : (
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
+                  <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
                 </div>
+              )}
+              <div className="min-w-0 flex-1 sm:hidden">
+                <h1 className="text-lg font-bold text-gray-900 truncate">{company?.name || 'AccessManager'}</h1>
+                <p className="text-xs text-gray-600 truncate">{company?.address || 'Visitor Management System'}</p>
               </div>
-              <p className="text-blue-200 text-xl">{t('guestTerminals')}</p>
             </div>
-            <LanguageSelector 
-              currentLanguage={language} 
-              onLanguageChange={setLanguage}
-              variant="light"
-            />
+            <div className="hidden sm:block text-center">
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{company?.name || 'AccessManager'}</h1>
+              <p className="text-gray-600">{company?.address || 'Visitor Management System'}</p>
+            </div>
+            <div className="flex justify-center sm:justify-end">
+              <LanguageSelector 
+                currentLanguage={language} 
+                onLanguageChange={setLanguage}
+              />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 mb-8">
           <div className="flex items-center justify-center">
-            <Users className="h-8 w-8 text-blue-600 mr-4" />
+            <Users className="h-8 w-8 text-gray-600 mr-4" />
             <div className="text-center">
               <p className="text-gray-600 text-lg">{t('currentGuests')}</p>
-              <p className="text-4xl font-bold text-blue-600">{currentGuests}</p>
+              <p className="text-4xl font-bold text-gray-900">{currentGuests}</p>
             </div>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8">
             <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
                 <LogIn className="h-8 w-8 text-green-600" />
@@ -174,7 +196,7 @@ const GuestPanel = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-8">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8">
             <div className="text-center mb-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
                 <LogOut className="h-8 w-8 text-red-600" />
@@ -214,7 +236,7 @@ const GuestPanel = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-8">
           <h3 className="text-xl font-bold text-gray-900 mb-4">{t('instructionsForUse')}:</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

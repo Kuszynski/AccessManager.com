@@ -40,19 +40,32 @@ const Reception = () => {
       console.log('Reception - Company data:', companyData)
       setCompany(companyData)
       
-      // Zawsze pobierz wszystkich gości ze statusem 'in'
+      // Pobierz wszystkich gości (aktywnych i wymeldowanych z ostatnich 24h)
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      
       const { data: allVisitors, error } = await supabase
         .from('visitors')
         .select('*')
-        .eq('status', 'in')
         .order('check_in_time', { ascending: false })
+      
+      // Filtruj gości: aktywni + wymeldowani w ciągu 24h
+      const filteredVisitors = allVisitors?.filter(visitor => {
+        if (visitor.status === 'in') return true
+        if (visitor.status === 'out' && visitor.check_out_time) {
+          const checkOutTime = new Date(visitor.check_out_time)
+          const oneDayAgoDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
+          return checkOutTime >= oneDayAgoDate
+        }
+        return false
+      }) || []
       
       if (error) {
         console.error('Reception - Błąd pobierania gości:', error)
       }
       
       console.log('Reception - Wszyscy goście:', allVisitors)
-      setVisitors(allVisitors || [])
+      console.log('Reception - Przefiltrowane goście:', filteredVisitors)
+      setVisitors(filteredVisitors)
     } catch (error) {
       console.error('Reception - Błąd ładowania danych:', error)
       setVisitors([])
@@ -102,10 +115,13 @@ const Reception = () => {
 
   const handleCheckOut = async (visitorId) => {
     try {
-      // Usuń dane gościa natychmiast (GDPR-friendly)
+      // Oznacz gościa jako wymeldowanego zamiast usuwania
       const { error } = await supabase
         .from('visitors')
-        .delete()
+        .update({
+          status: 'out',
+          check_out_time: new Date().toISOString()
+        })
         .eq('id', visitorId)
       
       if (error) throw error

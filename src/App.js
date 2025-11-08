@@ -4,6 +4,8 @@ import { useAuth } from './hooks/useAuth'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Reception from './pages/Reception'
+import AdminApproval from './pages/AdminApproval'
+import Settings from './pages/Settings'
 import GuestTerminal from './pages/GuestTerminal'
 import CheckoutTerminal from './pages/CheckoutTerminal'
 import GuestPanel from './pages/GuestPanel'
@@ -38,7 +40,10 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/reception" element={<Reception />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/admin/approval" element={<AdminApproval />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (
           <>

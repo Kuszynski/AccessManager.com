@@ -1,23 +1,24 @@
 import React from 'react'
 import { Globe } from 'lucide-react'
 
-const LanguageSelector = ({ currentLanguage, onLanguageChange }) => {
+const LanguageSelector = ({ currentLanguage, onLanguageChange, variant = 'default' }) => {
   const languages = [
     { code: 'no', name: 'NO', flag: '🇳🇴' },
     { code: 'en', name: 'EN', flag: '🇬🇧' },
     { code: 'pl', name: 'PL', flag: '🇵🇱' }
   ]
 
+  const currentLang = languages.find(lang => lang.code === currentLanguage)
+
   return (
-    <div className="flex items-center space-x-2 bg-white p-3 rounded-full shadow-lg border border-white/20">
-      <Globe className="h-4 w-4 text-gray-600" />
+    <div className="inline-flex items-center bg-gray-100 px-2 py-1 rounded-lg border border-gray-200 hover:bg-gray-200 transition-all duration-200">
       <select
         value={currentLanguage}
         onChange={(e) => onLanguageChange(e.target.value)}
-        className="text-sm bg-white border-none focus:outline-none cursor-pointer text-gray-800 font-medium pr-1"
+        className="text-lg bg-transparent border-none focus:outline-none cursor-pointer"
       >
         {languages.map((lang) => (
-          <option key={lang.code} value={lang.code} className="text-gray-800">
+          <option key={lang.code} value={lang.code} className="text-gray-800 bg-white">
             {lang.flag}
           </option>
         ))}

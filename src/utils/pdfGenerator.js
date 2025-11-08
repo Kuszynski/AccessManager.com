@@ -27,11 +27,11 @@ export const generateEvacuationList = (visitors, companyName, t) => {
   doc.setFont(undefined, 'bold')
   doc.setFontSize(10)
   doc.text(t ? t('serialNumber') : 'Lp.', 18, yPosition + 3)
-  doc.text(t ? t('nameHeader') : 'Imię i nazwisko', 35, yPosition + 3)
-  doc.text(t ? t('companyHeader') : 'Firma', 90, yPosition + 3)
-  doc.text(t ? t('hostName') : 'Odwiedza', 140, yPosition + 3)
-  doc.text(t ? t('phoneHeader') : 'Telefon', 190, yPosition + 3)
-  doc.text(t ? t('checkIn') : 'Wejście', 240, yPosition + 3)
+  doc.text('Navn', 35, yPosition + 3)
+  doc.text('Bedrift', 90, yPosition + 3)
+  doc.text('Telefon', 140, yPosition + 3)
+  doc.text('Person som besøkes', 190, yPosition + 3)
+  doc.text('Inngang', 240, yPosition + 3)
   
   // Linia pod nagłówkami
   yPosition += 8
@@ -55,11 +55,11 @@ export const generateEvacuationList = (visitors, companyName, t) => {
       doc.setFont(undefined, 'bold')
       doc.setFontSize(10)
       doc.text(t ? t('serialNumber') : 'Lp.', 18, yPosition + 3)
-      doc.text(t ? t('nameHeader') : 'Imię i nazwisko', 35, yPosition + 3)
-      doc.text(t ? t('companyHeader') : 'Firma', 90, yPosition + 3)
-      doc.text(t ? t('hostName') : 'Odwiedza', 140, yPosition + 3)
-      doc.text(t ? t('phoneHeader') : 'Telefon', 190, yPosition + 3)
-      doc.text(t ? t('checkIn') : 'Wejście', 240, yPosition + 3)
+      doc.text('Navn', 35, yPosition + 3)
+      doc.text('Bedrift', 90, yPosition + 3)
+      doc.text('Telefon', 140, yPosition + 3)
+      doc.text('Person som besøkes', 190, yPosition + 3)
+      doc.text('Inngang', 240, yPosition + 3)
       yPosition += 8
       doc.line(15, yPosition, 282, yPosition)
       yPosition += 8
@@ -85,11 +85,11 @@ export const generateEvacuationList = (visitors, companyName, t) => {
     if (company.length > 15) company = company.substring(0, 12) + '...'
     doc.text(company, 90, yPosition + 2)
     
+    doc.text(visitor.phone || '-', 140, yPosition + 2)
+    
     let host = visitor.host_name || '-'
     if (host.length > 15) host = host.substring(0, 12) + '...'
-    doc.text(host, 140, yPosition + 2)
-    
-    doc.text(visitor.phone || '-', 190, yPosition + 2)
+    doc.text(host, 190, yPosition + 2)
     doc.text(format(new Date(visitor.check_in_time), 'HH:mm'), 240, yPosition + 2)
     
     yPosition += 10

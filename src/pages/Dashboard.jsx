@@ -7,15 +7,17 @@ import Layout from '../components/Layout'
 import VisitorList from '../components/VisitorList'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
-import { AlertTriangle, Users, Download, Shield } from 'lucide-react'
+import { AlertTriangle, Users, Download, Shield, Settings, Upload, X } from 'lucide-react'
 
 const Dashboard = () => {
   const { user } = useAuth()
   const [company, setCompany] = useState(null)
   const [visitors, setVisitors] = useState([])
+  const [todayCheckedOut, setTodayCheckedOut] = useState([])
   const [loading, setLoading] = useState(true)
   const [alertLoading, setAlertLoading] = useState(false)
   const [language, setLanguage] = useState('no')
+
   const { t } = useTranslation(language)
 
   useEffect(() => {
@@ -42,19 +44,67 @@ const Dashboard = () => {
       console.log('Dashboard - Company data:', companyData)
       setCompany(companyData)
       
-      // Zawsze pobierz wszystkich gości ze statusem 'in'
+      // Pobierz gości ze statusem 'in' i 'out' (wymeldowanych z ostatnich 24h)
+      const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      const todayStart = new Date()
+      todayStart.setHours(0, 0, 0, 0)
+      
+      console.log('Loading visitors - oneDayAgo:', oneDayAgo)
+      
+      // Pobierz wszystkich gości i przefiltruj w kodzie (prostsze)
       const { data: allVisitors, error } = await supabase
         .from('visitors')
         .select('*')
-        .eq('status', 'in')
         .order('check_in_time', { ascending: false })
+      
+      // Filtruj gości: aktywni + wymeldowani w ciągu 24h
+      const filteredVisitors = allVisitors?.filter(visitor => {
+        if (visitor.status === 'in') return true
+        if (visitor.status === 'out' && visitor.check_out_time) {
+          const checkOutTime = new Date(visitor.check_out_time)
+          const oneDayAgoDate = new Date(Date.now() - 24 * 60 * 60 * 1000)
+          return checkOutTime >= oneDayAgoDate
+        }
+        return false
+      }) || []
+      
+      // Pobierz dzisiejszych wymeldowanych gości
+      const todayCheckedOut = allVisitors?.filter(visitor => {
+        if (visitor.status === 'out') {
+          if (visitor.check_out_time) {
+            const checkOutTime = new Date(visitor.check_out_time)
+            return checkOutTime >= todayStart
+          }
+          // Jeśli brak check_out_time, sprawdź created_at
+          const createdTime = new Date(visitor.created_at)
+          return createdTime >= todayStart
+        }
+        return false
+      }) || []
       
       if (error) {
         console.error('Dashboard - Błąd pobierania gości:', error)
       }
       
       console.log('Dashboard - Wszyscy goście:', allVisitors)
-      setVisitors(allVisitors || [])
+      console.log('Dashboard - Przefiltrowane goście:', filteredVisitors)
+      console.log('Dashboard - Dzisiejsi wymeldowani:', todayCheckedOut)
+      setVisitors(filteredVisitors)
+      
+      // Ustaw wymeldowanych gości w osobnym stanie
+      setTodayCheckedOut(todayCheckedOut)
+      
+      // Automatycznie usuń gości wymeldowanych ponad 24h temu
+      const { data: deletedVisitors } = await supabase
+        .from('visitors')
+        .delete()
+        .eq('status', 'out')
+        .lt('check_out_time', oneDayAgo)
+        .select()
+      
+      if (deletedVisitors?.length > 0) {
+        console.log('Auto-deleted old visitors:', deletedVisitors)
+      }
     } catch (error) {
       console.error('Dashboard - Błąd ładowania danych:', error)
       setVisitors([])
@@ -67,10 +117,13 @@ const Dashboard = () => {
 
   const handleCheckOut = async (visitorId) => {
     try {
-      // Usuń dane gościa natychmiast (GDPR-friendly)
+      // Oznacz gościa jako wymeldowanego zamiast usuwania
       const { error } = await supabase
         .from('visitors')
-        .delete()
+        .update({
+          status: 'out',
+          check_out_time: new Date().toISOString()
+        })
         .eq('id', visitorId)
       
       if (error) throw error
@@ -173,6 +226,8 @@ const Dashboard = () => {
     }
   }
 
+
+
   if (loading) {
     return (
       <Layout title={t('dashboard')} t={t}>
@@ -186,41 +241,37 @@ const Dashboard = () => {
   return (
     <Layout title={t('dashboard')} t={t}>
       <div className="space-y-6">
-        {/* Nowoczesny nagłówek firmy */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl shadow-xl p-8 mb-8">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 mr-6">
-                <Shield className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold mb-2">{company?.name}</h1>
-                <div className="flex items-center text-blue-100 mb-1">
-                  <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                  </svg>
-                  {company?.address}
-                </div>
-                {company?.phone && (
-                  <div className="flex items-center text-blue-100">
-                    <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                    </svg>
-                    {company.phone}
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className="flex items-center space-x-4">
-              <LanguageSelector 
-                currentLanguage={language} 
-                onLanguageChange={setLanguage}
-                variant="light"
+        {/* Modern Header */}
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 sm:p-6 bg-white rounded-2xl border border-gray-200 space-y-4 sm:space-y-0">
+          <div className="flex items-center">
+            {company?.logo_url ? (
+              <img 
+                src={company.logo_url} 
+                alt={company.name}
+                className="h-8 sm:h-10 w-auto mr-3 sm:mr-4"
               />
-              <div className="text-right">
-                <div className="text-sm text-blue-200">{new Date().toLocaleDateString('no-NO')}</div>
-                <div className="text-lg font-semibold">{new Date().toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'})}</div>
+            ) : (
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-lg flex items-center justify-center mr-3 sm:mr-4">
+                <Shield className="h-5 w-5 sm:h-6 sm:w-6 text-gray-600" />
               </div>
+            )}
+            <div className="min-w-0 flex-1">
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">
+                {company?.name || 'AccessManager'}
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-500 truncate">
+                {company?.address || 'Visitor Management System'}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between sm:justify-end space-x-4">
+            <LanguageSelector 
+              currentLanguage={language} 
+              onLanguageChange={setLanguage}
+            />
+            <div className="text-right">
+              <div className="text-xs sm:text-sm text-gray-500">{new Date().toLocaleDateString('no-NO')}</div>
+              <div className="text-sm sm:text-lg font-semibold text-gray-900">{new Date().toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'})}</div>
             </div>
           </div>
         </div>
@@ -228,14 +279,14 @@ const Dashboard = () => {
         {/* Nowoczesne karty akcji */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Statystyka gości */}
-          <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-blue-500">
+          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 mb-1">{t('currentGuests')}</p>
                 <p className="text-3xl font-bold text-gray-900">{visitors.length}</p>
               </div>
-              <div className="bg-blue-100 rounded-full p-3">
-                <Users className="h-8 w-8 text-blue-600" />
+              <div className="bg-gray-100 rounded-full p-3">
+                <Users className="h-8 w-8 text-gray-600" />
               </div>
             </div>
           </div>
@@ -283,8 +334,6 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <a
               href={`/panel/${company?.id || 'demo'}`}
-              target="_blank"
-              rel="noopener noreferrer"
               className="flex items-center justify-center px-6 py-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-lg font-semibold"
             >
               <Users className="h-6 w-6 mr-3" />
@@ -326,18 +375,83 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Lista obecnych gości */}
+        {/* Dzisiejsi wymeldowani - szybki podgląd */}
+        {todayCheckedOut.length > 0 && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              I dag utsjekket ({todayCheckedOut.length})
+            </h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Navn</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bedrift</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inngang</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utgang</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Varighet</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {todayCheckedOut.slice(0, 5).map((visitor) => {
+                    const checkIn = new Date(visitor.check_in_time)
+                    const checkOut = visitor.check_out_time ? new Date(visitor.check_out_time) : new Date()
+                    const duration = Math.round((checkOut - checkIn) / (1000 * 60)) // minuty
+                    const hours = Math.floor(duration / 60)
+                    const minutes = duration % 60
+                    
+                    return (
+                      <tr key={visitor.id} className="hover:bg-gray-50">
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {visitor.full_name}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {visitor.company_name || '-'}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {checkIn.toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'})}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {visitor.check_out_time ? checkOut.toLocaleTimeString('no-NO', {hour: '2-digit', minute: '2-digit'}) : 'Nettopp'}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                          {hours > 0 ? `${hours}t ${minutes}m` : `${minutes}m`}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+              {todayCheckedOut.length > 5 && (
+                <p className="text-sm text-gray-500 mt-2 text-center">
+                  Viser 5 av {todayCheckedOut.length} utsjekket i dag
+                </p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Lista gości */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            {t('currentGuests')} ({visitors.length})
-          </h3>
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Gjester ({visitors.filter(v => v.status === 'in').length} inne)
+            </h3>
+            <div className="flex space-x-2">
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                • Inne
+              </span>
+            </div>
+          </div>
           <VisitorList
-            visitors={visitors}
+            visitors={visitors.filter(v => v.status === 'in')}
             onCheckOut={handleCheckOut}
             onPrintBadge={handlePrintBadge}
+            company={company}
             t={t}
           />
         </div>
+
 
 
       </div>

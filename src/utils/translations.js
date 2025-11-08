@@ -2,7 +2,7 @@ export const translations = {
   no: {
     // Główne
     appName: 'SafeVisit',
-    appDescription: 'Gjestehåndteringssystem',
+    appDescription: 'by AccessManager',
     
     // Nawigacja
     dashboard: 'Hovedpanel',
@@ -27,7 +27,7 @@ export const translations = {
     
     // Formularz gościa
     fullName: 'Fullt navn',
-    company: 'Firma',
+    company: 'Bedrift',
     phone: 'Telefonnummer',
     hostName: 'Person som besøkes',
     guestEmail: 'E-post (valgfritt)',
@@ -173,13 +173,122 @@ export const translations = {
     emergencySMS: 'Nød-SMS sendt',
     smsResults: 'SMS resultater',
     smsSent: 'SMS sendt',
-    smsSimulation: 'SMS simulering - sjekk konsoll'
+    smsSimulation: 'SMS simulering - sjekk konsoll',
+    
+    // Terminal translations
+    systemActive: 'System aktiv',
+    connected: 'Tilkoblet',
+    disconnected: 'Frakoblet',
+    lastUpdated: 'Sist oppdatert',
+    newGuest: 'Ny gjest',
+    register: 'Registrer deg',
+    fillInformation: 'Fyll ut dine opplysninger',
+    getAccess: 'Få tilgang til bygningen',
+    notifyContact: 'Varsle din kontaktperson',
+    clickToStart: 'Trykk for å starte',
+    leaving: 'Forlater',
+    enterPhone: 'Skriv inn ditt telefonnummer',
+    confirmCheckout: 'Bekreft utsjekking',
+    clickToCheckout: 'Trykk for å melde ut',
+    howToUse: 'Slik bruker du terminalen',
+    step1: 'Velg "Registrer deg" når du ankommer',
+    step2: 'Fyll ut skjemaet med dine opplysninger',
+    step3: 'Meld deg ut når du forlater bygningen',
+    needHelp: 'Trenger du hjelp?',
+    contactReception: 'Kontakt resepsjonen hvis du har problemer',
+    callReception: 'Ring resepsjonen',
+    orGoToReception: 'Eller gå til resepsjonen for personlig hjelp',
+    
+    // Registration and checkout specific
+    pleaseFillinformation: 'Vennligst fyll ut informasjonen nedenfor',
+    nowRegistered: 'Du er nå registrert som gjest',
+    goToReceptionOrHost: 'Gå til resepsjonen eller til personen du skal besøke',
+    rememberPhone: 'Husk ditt telefonnummer',
+    neededForCheckout: 'Trenger dette for utsjekking når du forlater bygningen',
+    informReception: 'Informer resepsjonen når du forlater bygningen',
+    orUseCheckoutTerminal: 'Eller bruk utsjekking-terminalen ved utgangen',
+    autoReturn: 'Automatisk retur til terminal om',
+    seconds: 'sekunder',
+    backToTerminalNow: 'Tilbake til terminal nå',
+    enterPhoneToCheckout: 'Skriv inn ditt telefonnummer for å melde deg ut',
+    searching: 'Søker...',
+    nowCheckedOut: 'Du er nå utsjekket fra bygningen',
+    haveNiceDay: 'Ha en fin dag!',
+    
+    // Form validation
+    companyRequired: 'Bedrift er påkrevd',
+    emailRequired: 'E-post er påkrevd',
+    
+    // Welcome messages
+    welcomeMessage: 'Velkommen!',
+    
+    // Registration approval system
+    registrationPending: 'Registrering sendt! Vent på godkjenning fra administrator.',
+    guestManagementSystem: 'by AccessManager',
+    signIn: 'Logg inn',
+    loading: 'Laster...',
+    settings: 'Innstillinger',
+    companyLogo: 'Bedriftslogo',
+    removeLogo: 'Fjern logo',
+    uploading: 'Laster opp...',
+    uploadLogo: 'Last opp logo',
+    chooseFile: 'Velg fil',
+    back: 'Tilbake',
+    forgotPassword: 'Glemt passord?',
+    resetEmailSent: 'E-post med tilbakestilling av passord er sendt!',
+    resetError: 'Feil ved sending av e-post med tilbakestilling av passord',
+    confirmPassword: 'Bekreft passord',
+    passwordMinLength: 'Minimum 8 tegn',
+    passwordUppercase: 'En stor bokstav',
+    passwordLowercase: 'En liten bokstav',
+    passwordNumber: 'Ett tall',
+    passwordSpecial: 'Ett spesialtegn (!@#$%^&*)',
+    passwordRequirements: 'Passordkrav:',
+    passwordStrong: 'Passordet oppfyller kravene',
+    passwordMismatch: 'Passordene er ikke identiske',
+    passwordMatch: 'Passordene er identiske',
+    phoneRequired: 'Telefonnummer er påkrevd',
+    phoneInvalid: 'Bruk format: +47 12345678',
+    phoneValid: 'Gyldig telefonnummer',
+    phoneFormat: 'Format: +47 12345678 (med landskode)',
+    
+    // Approval system errors
+    accountPendingApproval: 'Kontoen venter på godkjenning fra administrator',
+    accountRejected: 'Kontoen ble avvist av administrator',
+    invalidLoginCredentials: 'Ugyldig påloggingsinformasjon',
+    
+    // Form validation
+    fillAllFields: 'Vennligst fyll ut alle påkrevde felt korrekt',
+    companyNameRequired: 'Firmanavn er påkrevd (minimum 2 tegn)',
+    companyAddressRequired: 'Firmaadresse er påkrevd (minimum 5 tegn)',
+    emailValid: 'Gyldig e-postadresse',
+    companyNameValid: 'Gyldig firmanavn',
+    companyAddressValid: 'Gyldig adresse',
+    
+    // Settings page
+    manageCompanySettings: 'Administrer bedriftsinnstillinger',
+    companyInformation: 'Bedriftsinformasjon',
+    receptionPhone: 'Resepsjonstelefon',
+    receptionPhoneDescription: 'Dette nummeret vises i appen for gjester som trenger hjelp',
+    companyNamePlaceholder: 'Skriv inn firmanavn',
+    settingsSaved: 'Innstillinger lagret!',
+    settingsError: 'Feil ved lagring av innstillinger',
+    logoTooLarge: 'Logo er for stort (maks 2MB)',
+    logoInvalidType: 'Kun bildefiler er tillatt',
+    logoUploaded: 'Logo lastet opp!',
+    logoError: 'Feil ved opplasting av logo',
+    confirmRemoveLogo: 'Er du sikker på at du vil fjerne logoen?',
+    logoRemoved: 'Logo fjernet!',
+    logoRemoveError: 'Feil ved fjerning av logo',
+    logoRequirements: 'PNG, JPG eller SVG. Maks 2MB.',
+    saveChanges: 'Lagre endringer',
+    saving: 'Lagrer...'
   },
   
   en: {
     // Main
     appName: 'SafeVisit',
-    appDescription: 'Guest Management System',
+    appDescription: 'by AccessManager',
     
     // Navigation
     dashboard: 'Dashboard',
@@ -342,13 +451,122 @@ export const translations = {
     emergencySMS: 'Emergency SMS sent',
     smsResults: 'SMS results',
     smsSent: 'SMS sent',
-    smsSimulation: 'SMS simulation - check console'
+    smsSimulation: 'SMS simulation - check console',
+    
+    // Terminal translations
+    systemActive: 'System active',
+    connected: 'Connected',
+    disconnected: 'Disconnected',
+    lastUpdated: 'Last updated',
+    newGuest: 'New guest',
+    register: 'Register',
+    fillInformation: 'Fill in your information',
+    getAccess: 'Get access to building',
+    notifyContact: 'Notify your contact person',
+    clickToStart: 'Click to start',
+    leaving: 'Leaving',
+    enterPhone: 'Enter your phone number',
+    confirmCheckout: 'Confirm checkout',
+    clickToCheckout: 'Click to check out',
+    howToUse: 'How to use the terminal',
+    step1: 'Select "Register" when you arrive',
+    step2: 'Fill out the form with your information',
+    step3: 'Check out when you leave the building',
+    needHelp: 'Need help?',
+    contactReception: 'Contact reception if you have problems',
+    callReception: 'Call reception',
+    orGoToReception: 'Or go to reception for personal help',
+    
+    // Registration and checkout specific
+    pleaseFillinformation: 'Please fill in the information below',
+    nowRegistered: 'You are now registered as a guest',
+    goToReceptionOrHost: 'Go to reception or to the person you are visiting',
+    rememberPhone: 'Remember your phone number',
+    neededForCheckout: 'You will need this for checkout when leaving the building',
+    informReception: 'Inform reception when you leave the building',
+    orUseCheckoutTerminal: 'Or use the checkout terminal at the exit',
+    autoReturn: 'Automatic return to terminal in',
+    seconds: 'seconds',
+    backToTerminalNow: 'Back to terminal now',
+    enterPhoneToCheckout: 'Enter your phone number to check out',
+    searching: 'Searching...',
+    nowCheckedOut: 'You are now checked out of the building',
+    haveNiceDay: 'Have a nice day!',
+    
+    // Form validation
+    companyRequired: 'Company is required',
+    emailRequired: 'Email is required',
+    
+    // Welcome messages
+    welcomeMessage: 'Welcome!',
+    
+    // Registration approval system
+    registrationPending: 'Registration sent! Wait for administrator approval.',
+    guestManagementSystem: 'by AccessManager',
+    signIn: 'Sign In',
+    loading: 'Loading...',
+    settings: 'Settings',
+    companyLogo: 'Company Logo',
+    removeLogo: 'Remove logo',
+    uploading: 'Uploading...',
+    uploadLogo: 'Upload logo',
+    chooseFile: 'Choose file',
+    back: 'Back',
+    forgotPassword: 'Forgot password?',
+    resetEmailSent: 'Password reset email sent!',
+    resetError: 'Error sending password reset email',
+    confirmPassword: 'Confirm password',
+    passwordMinLength: 'Minimum 8 characters',
+    passwordUppercase: 'One uppercase letter',
+    passwordLowercase: 'One lowercase letter',
+    passwordNumber: 'One number',
+    passwordSpecial: 'One special character (!@#$%^&*)',
+    passwordRequirements: 'Password requirements:',
+    passwordStrong: 'Password meets requirements',
+    passwordMismatch: 'Passwords do not match',
+    passwordMatch: 'Passwords match',
+    phoneRequired: 'Phone number is required',
+    phoneInvalid: 'Use format: +44 1234567890',
+    phoneValid: 'Valid phone number',
+    phoneFormat: 'Format: +44 1234567890 (with country code)',
+    
+    // Approval system errors
+    accountPendingApproval: 'Account pending administrator approval',
+    accountRejected: 'Account rejected by administrator',
+    invalidLoginCredentials: 'Invalid login credentials',
+    
+    // Form validation
+    fillAllFields: 'Please fill out all required fields correctly',
+    companyNameRequired: 'Company name is required (minimum 2 characters)',
+    companyAddressRequired: 'Company address is required (minimum 5 characters)',
+    emailValid: 'Valid email address',
+    companyNameValid: 'Valid company name',
+    companyAddressValid: 'Valid address',
+    
+    // Settings page
+    manageCompanySettings: 'Manage company settings',
+    companyInformation: 'Company Information',
+    receptionPhone: 'Reception Phone',
+    receptionPhoneDescription: 'This number is displayed in the app for guests who need help',
+    companyNamePlaceholder: 'Enter company name',
+    settingsSaved: 'Settings saved!',
+    settingsError: 'Error saving settings',
+    logoTooLarge: 'Logo is too large (max 2MB)',
+    logoInvalidType: 'Only image files are allowed',
+    logoUploaded: 'Logo uploaded!',
+    logoError: 'Error uploading logo',
+    confirmRemoveLogo: 'Are you sure you want to remove the logo?',
+    logoRemoved: 'Logo removed!',
+    logoRemoveError: 'Error removing logo',
+    logoRequirements: 'PNG, JPG or SVG. Max 2MB.',
+    saveChanges: 'Save Changes',
+    saving: 'Saving...'
   },
   
   pl: {
     // Główne
     appName: 'SafeVisit',
-    appDescription: 'System zarządzania gośćmi',
+    appDescription: 'by AccessManager',
     
     // Nawigacja
     dashboard: 'Panel główny',
@@ -511,7 +729,116 @@ export const translations = {
     emergencySMS: 'SMS alarmowy wysłany',
     smsResults: 'Wyniki SMS',
     smsSent: 'SMS wysłane',
-    smsSimulation: 'Symulacja SMS - sprawdź konsolę'
+    smsSimulation: 'Symulacja SMS - sprawdź konsolę',
+    
+    // Terminal translations
+    systemActive: 'System aktywny',
+    connected: 'Połączony',
+    disconnected: 'Rozłączony',
+    lastUpdated: 'Ostatnia aktualizacja',
+    newGuest: 'Nowy gość',
+    register: 'Zarejestruj się',
+    fillInformation: 'Wypełnij swoje dane',
+    getAccess: 'Uzyskaj dostęp do budynku',
+    notifyContact: 'Powiadom swoją osobę kontaktową',
+    clickToStart: 'Kliknij aby rozpocząć',
+    leaving: 'Wychodzi',
+    enterPhone: 'Wprowadź swój numer telefonu',
+    confirmCheckout: 'Potwierdź wymeldowanie',
+    clickToCheckout: 'Kliknij aby się wymeldować',
+    howToUse: 'Jak korzystać z terminala',
+    step1: 'Wybierz "Zarejestruj się" gdy przybędziesz',
+    step2: 'Wypełnij formularz swoimi danymi',
+    step3: 'Wymelduj się gdy opuszczasz budynek',
+    needHelp: 'Potrzebujesz pomocy?',
+    contactReception: 'Skontaktuj się z recepcją jeśli masz problemy',
+    callReception: 'Zadzwoń do recepcji',
+    orGoToReception: 'Lub idź do recepcji po osobistą pomoc',
+    
+    // Registration and checkout specific
+    pleaseFillinformation: 'Proszę wypełnić informacje poniżej',
+    nowRegistered: 'Jesteś teraz zarejestrowany jako gość',
+    goToReceptionOrHost: 'Idź do recepcji lub do osoby, którą odwiedzasz',
+    rememberPhone: 'Zapamiętaj swój numer telefonu',
+    neededForCheckout: 'Będziesz tego potrzebować przy wymeldowaniu',
+    informReception: 'Poinformuj recepcję gdy opuszczasz budynek',
+    orUseCheckoutTerminal: 'Lub użyj terminala wymeldowania przy wyjściu',
+    autoReturn: 'Automatyczny powrót do terminala za',
+    seconds: 'sekund',
+    backToTerminalNow: 'Powróć do terminala teraz',
+    enterPhoneToCheckout: 'Wprowadź swój numer telefonu aby się wymeldować',
+    searching: 'Szukam...',
+    nowCheckedOut: 'Jesteś teraz wymeldowany z budynku',
+    haveNiceDay: 'Miłego dnia!',
+    
+    // Form validation
+    companyRequired: 'Firma jest wymagana',
+    emailRequired: 'Email jest wymagany',
+    
+    // Welcome messages
+    welcomeMessage: 'Witamy!',
+    
+    // Registration approval system
+    registrationPending: 'Rejestracja wysłana! Oczekuj na zatwierdzenie przez administratora.',
+    guestManagementSystem: 'by AccessManager',
+    signIn: 'Zaloguj się',
+    loading: 'Ładowanie...',
+    settings: 'Ustawienia',
+    companyLogo: 'Logo firmy',
+    removeLogo: 'Usuń logo',
+    uploading: 'Przesyłanie...',
+    uploadLogo: 'Prześlij logo',
+    chooseFile: 'Wybierz plik',
+    back: 'Powrót',
+    forgotPassword: 'Zapomniałeś hasła?',
+    resetEmailSent: 'Email z resetem hasła został wysłany!',
+    resetError: 'Błąd podczas wysyłania emaila z resetem hasła',
+    confirmPassword: 'Potwierdź hasło',
+    passwordMinLength: 'Minimum 8 znaków',
+    passwordUppercase: 'Jedna wielka litera',
+    passwordLowercase: 'Jedna mała litera',
+    passwordNumber: 'Jedna cyfra',
+    passwordSpecial: 'Jeden znak specjalny (!@#$%^&*)',
+    passwordRequirements: 'Wymagania dotyczące hasła:',
+    passwordStrong: 'Hasło spełnia wymagania',
+    passwordMismatch: 'Hasła nie są identyczne',
+    passwordMatch: 'Hasła są identyczne',
+    phoneRequired: 'Numer telefonu jest wymagany',
+    phoneInvalid: 'Użyj formatu: +48 123456789',
+    phoneValid: 'Prawidłowy numer telefonu',
+    phoneFormat: 'Format: +48 123456789 (z kodem kraju)',
+    
+    // Approval system errors
+    accountPendingApproval: 'Konto oczekuje na zatwierdzenie przez administratora',
+    accountRejected: 'Konto zostało odrzucone przez administratora',
+    invalidLoginCredentials: 'Nieprawidłowe dane logowania',
+    
+    // Form validation
+    fillAllFields: 'Proszę wypełnić wszystkie wymagane pola poprawnie',
+    companyNameRequired: 'Nazwa firmy jest wymagana (minimum 2 znaki)',
+    companyAddressRequired: 'Adres firmy jest wymagany (minimum 5 znaków)',
+    emailValid: 'Prawidłowy adres email',
+    companyNameValid: 'Prawidłowa nazwa firmy',
+    companyAddressValid: 'Prawidłowy adres',
+    
+    // Settings page
+    manageCompanySettings: 'Zarządzaj ustawieniami firmy',
+    companyInformation: 'Informacje o firmie',
+    receptionPhone: 'Telefon recepcji',
+    receptionPhoneDescription: 'Ten numer jest wyświetlany w aplikacji dla gości potrzebujących pomocy',
+    companyNamePlaceholder: 'Wprowadź nazwę firmy',
+    settingsSaved: 'Ustawienia zapisane!',
+    settingsError: 'Błąd zapisu ustawień',
+    logoTooLarge: 'Logo jest za duże (maks 2MB)',
+    logoInvalidType: 'Dozwolone są tylko pliki graficzne',
+    logoUploaded: 'Logo przesłane!',
+    logoError: 'Błąd przesyłania logo',
+    confirmRemoveLogo: 'Czy na pewno chcesz usunąć logo?',
+    logoRemoved: 'Logo usunięte!',
+    logoRemoveError: 'Błąd usuwania logo',
+    logoRequirements: 'PNG, JPG lub SVG. Maks 2MB.',
+    saveChanges: 'Zapisz zmiany',
+    saving: 'Zapisywanie...'
   }
 }
 

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { User, Building, Phone, UserCheck } from 'lucide-react'
+import { User, Building, Phone, UserCheck, Mail } from 'lucide-react'
 
-const VisitorForm = ({ onSubmit, loading = false, t }) => {
+const VisitorForm = ({ onSubmit, loading = false, t, language = 'no' }) => {
   const [formData, setFormData] = useState({
     full_name: '',
     company_name: '',
     phone: '',
     host_name: '',
-    host_phone: '',
+    host_email: '',
     email: ''
   })
   const [errors, setErrors] = useState({})
@@ -33,30 +33,30 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
     
     const newErrors = {}
     
+    // Walidacja nazwy firmy - wymagana
+    if (!formData.company_name.trim()) {
+      newErrors.company_name = t('companyRequired') || 'Bedrift er påkrevd'
+    }
+    
     // Walidacja telefonu - teraz wymagany
     if (!formData.phone.trim()) {
-      newErrors.phone = t ? t('phoneRequired') : 'Telefonnummer er påkrevd'
+      newErrors.phone = t('phoneRequired') || 'Telefonnummer er påkrevd'
     } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = t ? t('invalidPhone') : 'Ugyldig telefonnummer. Bruk format: 12345678 eller +47 12345678'
+      newErrors.phone = t('invalidPhone') || 'Ugyldig telefonnummer. Bruk format: 12345678 eller +47 12345678'
     }
     
-    // Walidacja telefonu gospodarza - teraz wymagany
-    if (!formData.host_phone.trim()) {
-      newErrors.host_phone = t ? t('hostPhoneRequired') || 'Telefon til vert er påkrevd' : 'Telefon til vert er påkrevd'
-    } else if (!validatePhone(formData.host_phone)) {
-      newErrors.host_phone = t ? t('invalidPhone') : 'Ugyldig telefonnummer. Bruk format: 12345678 eller +47 12345678'
-    }
-    
-    // Walidacja emaila
-    if (formData.email && !validateEmail(formData.email)) {
-      newErrors.email = t ? t('invalidEmail') : 'Ugyldig e-postadresse'
+    // Walidacja emaila - wymagany
+    if (!formData.email.trim()) {
+      newErrors.email = t('emailRequired') || 'E-post er påkrevd'
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = t('invalidEmail') || 'Ugyldig e-postadresse'
     }
     
     setErrors(newErrors)
     
     // Sprawdź zgodę na politykę prywatności
     if (!privacyAccepted) {
-      newErrors.privacy = t ? t('privacyRequired') : 'Du må godta personvernerklæringen'
+      newErrors.privacy = t('privacyRequired') || 'Du må godta personvernerklæringen'
     }
     
     setErrors(newErrors)
@@ -75,11 +75,11 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-semibold text-gray-800 mb-3">
-          <User className="inline h-5 w-5 mr-2 text-blue-600" />
-          {t ? t('fullName') : 'Fullt navn'} *
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          <User className="inline h-4 w-4 mr-2 text-gray-500" />
+          {t('fullName') || 'Fullt navn'} *
         </label>
         <input
           type="text"
@@ -87,30 +87,36 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
           required
           value={formData.full_name}
           onChange={handleChange}
-          className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 text-lg"
-          placeholder={t ? t('namePlaceholder') : 'Ola Nordmann'}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-100 transition-colors"
+          placeholder={t('namePlaceholder') || 'Ola Nordmann'}
         />
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          <Building className="inline h-4 w-4 mr-1" />
-          {t ? t('company') : 'Firma'}
+          <Building className="inline h-4 w-4 mr-2 text-gray-500" />
+          {t('company') || 'Bedrift'} *
         </label>
         <input
           type="text"
           name="company_name"
+          required
           value={formData.company_name}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-          placeholder={t ? t('companyPlaceholder') : 'Bedriftsnavn'}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+            errors.company_name ? 'border-red-500 focus:border-red-500 focus:ring-red-100' : 'border-gray-300 focus:border-gray-500 focus:ring-gray-100'
+          }`}
+          placeholder={t('companyPlaceholder') || 'Bedriftsnavn'}
         />
+        {errors.company_name && (
+          <p className="text-red-500 text-sm mt-1">{errors.company_name}</p>
+        )}
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          <Phone className="inline h-4 w-4 mr-1" />
-          {t ? t('phone') : 'Telefonnummer'} *
+          <Phone className="inline h-4 w-4 mr-2 text-gray-500" />
+          {t('phone') || 'Telefonnummer'} *
         </label>
         <input
           type="tel"
@@ -118,10 +124,10 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
           required
           value={formData.phone}
           onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-            errors.phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary-500'
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+            errors.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-100' : 'border-gray-300 focus:border-gray-500 focus:ring-gray-100'
           }`}
-          placeholder={t ? t('phonePlaceholder') : '+47 123 45 678'}
+          placeholder={t('phonePlaceholder') || '+47 123 45 678'}
         />
         {errors.phone && (
           <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
@@ -130,8 +136,36 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          <UserCheck className="inline h-4 w-4 mr-1" />
-          {t ? t('hostName') : 'Person som besøkes'} *
+          <Mail className="inline h-4 w-4 mr-2 text-gray-500" />
+          {t('email') || 'E-post'} *
+        </label>
+        <input
+          type="email"
+          name="email"
+          required
+          value={formData.email}
+          onChange={handleChange}
+          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+            errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-100' : 'border-gray-300 focus:border-gray-500 focus:ring-gray-100'
+          }`}
+          placeholder={t('emailPlaceholder') || 'ola@email.no'}
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+        )}
+        <div className="mt-2">
+          <div className="p-2 bg-gray-100 rounded border border-gray-200">
+            <p className="text-xs text-gray-700 flex items-center">
+              🚨 <span className="ml-1">Ved brannalarm sendes evakueringsinstruksjoner til denne e-posten</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          <UserCheck className="inline h-4 w-4 mr-2 text-gray-500" />
+          {t('hostName') || 'Person som besøkes'} *
         </label>
         <input
           type="text"
@@ -139,54 +173,9 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
           required
           value={formData.host_name}
           onChange={handleChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-          placeholder={t ? t('hostPlaceholder') : 'Kari Hansen'}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-100 transition-colors"
+          placeholder={t('hostPlaceholder') || 'Kari Hansen'}
         />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          <Phone className="inline h-4 w-4 mr-1" />
-          {t ? t('hostPhone') || 'Telefon til vert' : 'Telefon til vert'} *
-        </label>
-        <input
-          type="tel"
-          name="host_phone"
-          required
-          value={formData.host_phone}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-            errors.host_phone ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary-500'
-          }`}
-          placeholder={t ? t('hostPhonePlaceholder') || '+47 987 65 432' : '+47 987 65 432'}
-        />
-        {errors.host_phone && (
-          <p className="text-red-500 text-sm mt-1">{errors.host_phone}</p>
-        )}
-        <p className="text-xs text-gray-500 mt-1">
-          {t ? t('hostPhoneDescription') || 'For å varsle om ankomst' : 'For å varsle om ankomst'}
-        </p>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          <Phone className="inline h-4 w-4 mr-1" />
-          {t ? t('guestEmail') : 'E-post (valgfritt)'}
-        </label>
-        <input
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
-            errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-primary-500'
-          }`}
-          placeholder={t ? t('emailPlaceholder') : 'ola@email.no'}
-        />
-        {errors.email && (
-          <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-        )}
-        <p className="text-xs text-gray-500 mt-1">{t ? t('emailDescription') : 'ID-kort vil bli sendt til denne e-posten'}</p>
       </div>
 
       <div className="space-y-3">
@@ -202,13 +191,13 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
             required
           />
           <label htmlFor="privacy-consent" className="ml-3 text-sm text-gray-700">
-            {t ? t('privacyConsent') : 'Jeg godtar'}{' '}
+            {t('privacyConsent') || 'Jeg godtar'}{' '}
             <a 
               href="/privacy" 
               target="_blank" 
-              className="text-blue-600 hover:text-blue-800 underline font-medium"
+              className="text-gray-700 hover:text-gray-900 underline font-medium"
             >
-              {t ? t('privacyPolicy') : 'personvernerklæringen'}
+              {t('privacyPolicy') || 'personvernerklæringen'}
             </a>
             {' *'}
           </label>
@@ -217,14 +206,14 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
           <p className="text-red-500 text-sm ml-7">{errors.privacy}</p>
         )}
         <p className="text-xs text-gray-500 ml-7">
-          {t ? t('dataDeletedOnCheckout') : 'Dine data slettes automatisk når du sjekker ut'}
+          {t('dataDeletedOnCheckout') || 'Dine data slettes automatisk når du sjekker ut'}
         </p>
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+        className="w-full bg-gray-900 text-white py-3 px-6 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
       >
         {loading ? (
           <div className="flex items-center justify-center">
@@ -232,10 +221,10 @@ const VisitorForm = ({ onSubmit, loading = false, t }) => {
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            {t ? t('registering') : 'Registrerer...'}
+            {t('registering') || 'Registrerer...'}
           </div>
         ) : (
-          t ? t('registerGuest') : 'Registrer gjest'
+          t('registerGuest') || 'Registrer gjest'
         )}
       </button>
     </form>

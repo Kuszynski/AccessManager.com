@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { supabase } from '../utils/supabase'
 import LanguageSelector from '../components/LanguageSelector'
 import { useTranslation } from '../utils/translations'
-import { Shield, LogIn, LogOut, Clock, Wifi, WifiOff } from 'lucide-react'
+import { Shield, LogIn, LogOut, Clock, Wifi, WifiOff, Phone, Settings, Upload, X } from 'lucide-react'
 
 const GuestDashboard = () => {
   const { companyId } = useParams()
@@ -13,6 +13,7 @@ const GuestDashboard = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine)
   const [lastActivity, setLastActivity] = useState(Date.now())
   const [showSuccess, setShowSuccess] = useState(false)
+
   const { t } = useTranslation(language)
 
   useEffect(() => {
@@ -134,6 +135,8 @@ const GuestDashboard = () => {
     }
   }
 
+
+
   const formatTime = (date) => {
     return date.toLocaleTimeString('no-NO', { 
       hour: '2-digit', 
@@ -151,71 +154,57 @@ const GuestDashboard = () => {
     })
   }
 
+  useEffect(() => {
+    if (company?.name) {
+      document.title = `Digital resepsjon - ${company.name}`
+    }
+  }, [company])
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 p-8 select-none">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white p-4 md:p-8 select-none">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-8 rounded-3xl shadow-2xl mb-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center">
-              <Shield className="h-16 w-16 mr-6" />
-              <div>
-                <h1 className="text-6xl font-bold mb-2">
-                  {company?.name}
-                </h1>
-                <p className="text-2xl text-blue-100 mb-4">
-                  {t('welcomeTo')} {company?.name}
-                </p>
-                <p className="text-blue-200 text-xl">{company?.address}</p>
-              </div>
-            </div>
-            <div className="text-right">
-              <LanguageSelector 
-                currentLanguage={language} 
-                onLanguageChange={setLanguage}
-                variant="light"
+        <div className="flex justify-between items-start mb-8">
+          <div className="flex items-center">
+            {company?.logo_url ? (
+              <img 
+                src={company.logo_url} 
+                alt={company.name}
+                className="h-8 w-auto mr-3"
               />
-              <div className="mt-4">
-                <div className="flex items-center text-blue-100 mb-2">
-                  <Clock className="h-6 w-6 mr-2" />
-                  <span className="text-lg">{formatDate(currentTime)}</span>
-                  <div className="ml-4 flex items-center">
-                    {isOnline ? 
-                      <Wifi className="h-5 w-5 text-green-300" /> : 
-                      <WifiOff className="h-5 w-5 text-red-300" />
-                    }
-                  </div>
-                </div>
-                <div className="text-4xl font-bold">
-                  {formatTime(currentTime)}
-                </div>
-              </div>
-            </div>
+            ) : null}
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              {company?.name}
+            </h1>
+          </div>
+          <div className="flex justify-end">
+            <LanguageSelector 
+              currentLanguage={language} 
+              onLanguageChange={setLanguage}
+            />
           </div>
         </div>
 
         {/* Main Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           {/* Registration */}
           <a
             href={getRegistrationLink()}
             onClick={() => handleActionClick('register')}
-            className="group bg-white rounded-3xl shadow-2xl p-12 hover:shadow-3xl transition-all duration-300 hover:scale-105 border-4 border-transparent hover:border-green-200 active:scale-95"
+            className="group bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-8 md:p-12 transition-all duration-200 hover:shadow-lg active:scale-98"
           >
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full mb-8 group-hover:bg-green-200 transition-colors">
-                <LogIn className="h-12 w-12 text-green-600" />
+              <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-2xl mb-6">
+                <LogIn className="h-8 w-8 md:h-10 md:w-10 text-green-600" />
               </div>
-              <h3 className="text-4xl font-bold text-gray-900 mb-4">
-                {t('checkInRegistration')}
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                {t('register') || 'Registrer deg'}
               </h3>
-              <p className="text-xl text-gray-600 mb-6">
-                {t('terminalForNewGuests')}
+              <p className="text-gray-600 mb-6">
+                {t('fillInformation') || 'Fyll ut dine opplysninger'}
               </p>
-              <div className="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold text-xl group-hover:bg-green-700 transition-colors">
-                {t('tapToRegister') || (language === 'no' ? 'Trykk her for å registrere deg' :
-                 language === 'en' ? 'Tap here to register' :
-                 'Kliknij aby się zarejestrować')}
+              <div className="bg-green-600 text-white px-6 py-3 rounded-xl font-semibold group-hover:bg-green-700 transition-colors">
+                {t('clickToStart') || 'Trykk for å starte'}
               </div>
             </div>
           </a>
@@ -224,22 +213,20 @@ const GuestDashboard = () => {
           <a
             href={getCheckoutLink()}
             onClick={() => handleActionClick('checkout')}
-            className="group bg-white rounded-3xl shadow-2xl p-12 hover:shadow-3xl transition-all duration-300 hover:scale-105 border-4 border-transparent hover:border-red-200 active:scale-95"
+            className="group bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-2xl p-8 md:p-12 transition-all duration-200 hover:shadow-lg active:scale-98"
           >
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-red-100 rounded-full mb-8 group-hover:bg-red-200 transition-colors">
-                <LogOut className="h-12 w-12 text-red-600" />
+              <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-red-100 rounded-2xl mb-6">
+                <LogOut className="h-8 w-8 md:h-10 md:w-10 text-red-600" />
               </div>
-              <h3 className="text-4xl font-bold text-gray-900 mb-4">
-                {t('checkOutDeparture')}
+              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                {t('checkOut') || 'Meld deg ut'}
               </h3>
-              <p className="text-xl text-gray-600 mb-6">
-                {t('terminalForDepartingGuests')}
+              <p className="text-gray-600 mb-6">
+                {t('enterPhone') || 'Skriv inn ditt telefonnummer'}
               </p>
-              <div className="bg-red-600 text-white px-8 py-4 rounded-2xl font-bold text-xl group-hover:bg-red-700 transition-colors">
-                {t('tapToCheckout') || (language === 'no' ? 'Trykk her for å melde deg ut' :
-                 language === 'en' ? 'Tap here to check out' :
-                 'Kliknij aby się wymeldować')}
+              <div className="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold group-hover:bg-red-700 transition-colors">
+                {t('clickToCheckout') || 'Trykk for å melde ut'}
               </div>
             </div>
           </a>
@@ -253,34 +240,20 @@ const GuestDashboard = () => {
             </div>
           </div>
         )}
+
+
         
-        {/* Offline Warning */}
-        {!isOnline && (
-          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg z-50">
-            <div className="flex items-center">
-              <WifiOff className="h-5 w-5 mr-2" />
-              {t('noInternet') || (language === 'no' ? 'Ingen internettforbindelse' :
-               language === 'en' ? 'No internet connection' :
-               'Brak połączenia internetowego')}
-            </div>
+        {/* Help Section */}
+        {company?.phone && (
+          <div className="mt-12 text-center">
+            <p className="text-gray-500 text-sm mb-2">
+              {t('needHelp') || 'Trenger du hjelp?'}
+            </p>
+            <p className="text-gray-700 font-medium">
+              {t('callReception') || 'Ring resepsjonen'}: {company.phone}
+            </p>
           </div>
         )}
-        
-        {/* Footer Info */}
-        <div className="mt-12 text-center">
-          <div className="bg-white rounded-2xl shadow-lg p-6 inline-block">
-            <p className="text-gray-600 text-lg">
-              {t('needHelp') || (language === 'no' ? 'Trenger du hjelp? Kontakt resepsjonen' :
-               language === 'en' ? 'Need help? Contact reception' :
-               'Potrzebujesz pomocy? Skontaktuj się z recepcją')}
-            </p>
-            {company?.phone && (
-              <p className="text-2xl font-bold text-blue-600 mt-2">
-                {company.phone}
-              </p>
-            )}
-          </div>
-        </div>
       </div>
     </div>
   )

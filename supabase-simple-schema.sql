@@ -10,6 +10,7 @@ CREATE TABLE companies (
     address TEXT,
     phone VARCHAR(50),
     admin_email VARCHAR(255) NOT NULL,
+    logo_url TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -22,6 +23,7 @@ CREATE TABLE visitors (
     email VARCHAR(255),
     host_name VARCHAR(255) NOT NULL,
     host_phone VARCHAR(50),
+    host_email VARCHAR(255),
     qr_code_id VARCHAR(255) UNIQUE NOT NULL,
     check_in_time TIMESTAMP WITH TIME ZONE NOT NULL,
     check_out_time TIMESTAMP WITH TIME ZONE,
@@ -44,8 +46,10 @@ ALTER TABLE companies DISABLE ROW LEVEL SECURITY;
 ALTER TABLE visitors DISABLE ROW LEVEL SECURITY;
 ALTER TABLE alerts DISABLE ROW LEVEL SECURITY;
 
--- Dodaj kolumnę host_phone do istniejącej tabeli (jeśli już istnieje)
+-- Dodaj brakujące kolumny do istniejącej tabeli (jeśli już istnieje)
 ALTER TABLE visitors ADD COLUMN IF NOT EXISTS host_phone VARCHAR(50);
+ALTER TABLE visitors ADD COLUMN IF NOT EXISTS host_email VARCHAR(255);
+ALTER TABLE companies ADD COLUMN IF NOT EXISTS logo_url TEXT;
 
 -- Dodaj przykładową firmę
 INSERT INTO companies (name, address, phone, admin_email) 
