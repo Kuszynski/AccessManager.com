@@ -21,6 +21,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 function App() {
   const { user, loading } = useAuth()
 
+  // Debug logging
+  console.log('App render - user:', user, 'loading:', loading)
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex justify-center items-center">
@@ -29,10 +32,11 @@ function App() {
     )
   }
 
-  return (
-    <ErrorBoundary>
-      <Router>
-        <Routes>
+  try {
+    return (
+      <ErrorBoundary>
+        <Router>
+          <Routes>
         {/* Publiczne trasy */}
         <Route path="/guest/:companyId" element={<GuestTerminal />} />
         <Route path="/checkout/:companyId" element={<CheckoutTerminal />} />
@@ -57,10 +61,27 @@ function App() {
             <Route path="*" element={<Navigate to="/login" replace />} />
           </>
         )}
-        </Routes>
-      </Router>
-    </ErrorBoundary>
-  )
+          </Routes>
+        </Router>
+      </ErrorBoundary>
+    )
+  } catch (error) {
+    console.error('App render error:', error)
+    return (
+      <div className="min-h-screen bg-red-50 flex justify-center items-center p-4">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Application Error</h1>
+          <p className="text-red-500 mb-4">Something went wrong. Please refresh the page.</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-red-600 text-white px-4 py-2 rounded"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default App
