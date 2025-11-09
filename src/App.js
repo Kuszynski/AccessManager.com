@@ -24,9 +24,17 @@ function App() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex justify-center items-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Loading...</p>
+        </div>
       </div>
     )
+  }
+
+  // Fallback jeśli coś poszło nie tak
+  if (!user && !loading) {
+    console.log('No user, redirecting to login');
   }
 
   try {
