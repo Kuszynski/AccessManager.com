@@ -106,32 +106,38 @@ const Settings = () => {
 
     setUploading(true)
     try {
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${company.id}-${Date.now()}.${fileExt}`
-
-      const { error: uploadError } = await supabase.storage
-        .from('company-logos')
-        .upload(fileName, file)
-
-      if (uploadError) throw uploadError
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('company-logos')
-        .getPublicUrl(fileName)
-
-      const { error: updateError } = await supabase
-        .from('companies')
-        .update({ logo_url: publicUrl })
-        .eq('id', company.id)
-
-      if (updateError) throw updateError
-
-      setCompany({ ...company, logo_url: publicUrl })
-      alert(t('logoUploaded') || 'Logo lastet opp!')
+      // Konwertuj do base64
+      const reader = new FileReader()
+      reader.onload = async (e) => {
+        try {
+          const logoUrl = e.target.result
+          
+          const { error } = await supabase
+            .from('companies')
+            .update({ logo_url: logoUrl })
+            .eq('id', company.id)
+          
+          if (error) throw error
+          
+          setCompany({ ...company, logo_url: logoUrl })
+          alert(t('logoUploaded') || 'Logo lastet opp!')
+        } catch (error) {
+          console.error('Error saving logo:', error)
+          alert(t('logoError') || 'Feil ved opplasting av logo')
+        } finally {
+          setUploading(false)
+        }
+      }
+      
+      reader.onerror = () => {
+        alert(t('logoError') || 'Feil ved lesing av fil')
+        setUploading(false)
+      }
+      
+      reader.readAsDataURL(file)
     } catch (error) {
       console.error('Error uploading logo:', error)
       alert(t('logoError') || 'Feil ved opplasting av logo')
-    } finally {
       setUploading(false)
     }
   }
