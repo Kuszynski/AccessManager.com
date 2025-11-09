@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkaccessmanager=self.webpackChunkaccessmanager||[]).push([[14],{5014:(a,e,r)=>{r.d(e,{generateQRCode:()=>t});var c=r(8970);const t=async a=>{try{return await c.toDataURL(a,{width:200,margin:2,color:{dark:"#000000",light:"#FFFFFF"}})}catch(e){throw console.error("B\u0142\u0105d generowania kodu QR:",e),e}}}}]);
+//# sourceMappingURL=14.025043c7.chunk.js.map
