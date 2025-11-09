@@ -52,10 +52,11 @@ const Dashboard = () => {
       
       console.log('Loading visitors - oneDayAgo:', oneDayAgo)
       
-      // Pobierz wszystkich gości i przefiltruj w kodzie (prostsze)
+      // Pobierz TYLKO gości z tej firmy - BEZPIECZEŃSTWO!
       const { data: allVisitors, error } = await supabase
         .from('visitors')
         .select('*')
+        .eq('company_id', companyData.id)
         .order('check_in_time', { ascending: false })
       
       // Filtruj gości: aktywni + wymeldowani w ciągu 24h

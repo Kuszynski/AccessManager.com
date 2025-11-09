@@ -46,6 +46,7 @@ const Reception = () => {
       const { data: allVisitors, error } = await supabase
         .from('visitors')
         .select('*')
+        .eq('company_id', companyData.id)
         .order('check_in_time', { ascending: false })
       
       // Filtruj gości: aktywni + wymeldowani w ciągu 24h
