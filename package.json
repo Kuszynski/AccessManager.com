@@ -1,7 +1,7 @@
 {
   "name": "accessmanager",
   "version": "1.0.0",
-  "homepage": "https://kuszynski.github.io/AccessManager.com",
+
   "private": true,
   "author": "Michał Kuszyński",
   "license": "UNLICENSED",
